@@ -1,7 +1,5 @@
-package me.workhive.workhive.model.enums;
+package me.workhive.workhive.domain.entities.enums;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

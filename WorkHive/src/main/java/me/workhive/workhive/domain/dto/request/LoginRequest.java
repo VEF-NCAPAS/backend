@@ -1,4 +1,4 @@
-package me.workhive.workhive.dto.request;
+package me.workhive.workhive.domain.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

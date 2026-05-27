@@ -1,21 +1,21 @@
-package me.workhive.workhive.service.impl;
+package me.workhive.workhive.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import me.workhive.workhive.dto.request.CandidateRegisterRequest;
-import me.workhive.workhive.dto.request.LoginRequest;
-import me.workhive.workhive.dto.request.RecruiterRegisterRequest;
-import me.workhive.workhive.dto.response.AuthResponse;
-import me.workhive.workhive.model.CandidateProfile;
-import me.workhive.workhive.model.Company;
-import me.workhive.workhive.model.RecruiterProfile;
-import me.workhive.workhive.model.User;
-import me.workhive.workhive.model.enums.Role;
-import me.workhive.workhive.repository.CandidateRepository;
-import me.workhive.workhive.repository.CompanyRepository;
-import me.workhive.workhive.repository.RecruiterRepository;
-import me.workhive.workhive.repository.UserRepository;
-import me.workhive.workhive.service.AuthService;
-import me.workhive.workhive.util.JwtUtil;
+import me.workhive.workhive.domain.dto.request.CandidateRegisterRequest;
+import me.workhive.workhive.domain.dto.request.LoginRequest;
+import me.workhive.workhive.domain.dto.request.RecruiterRegisterRequest;
+import me.workhive.workhive.domain.dto.response.AuthResponse;
+import me.workhive.workhive.domain.entities.CandidateProfile;
+import me.workhive.workhive.domain.entities.Company;
+import me.workhive.workhive.domain.entities.RecruiterProfile;
+import me.workhive.workhive.domain.entities.User;
+import me.workhive.workhive.domain.entities.enums.Role;
+import me.workhive.workhive.repositories.CandidateRepository;
+import me.workhive.workhive.repositories.CompanyRepository;
+import me.workhive.workhive.repositories.RecruiterRepository;
+import me.workhive.workhive.repositories.UserRepository;
+import me.workhive.workhive.services.AuthService;
+import me.workhive.workhive.utils.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

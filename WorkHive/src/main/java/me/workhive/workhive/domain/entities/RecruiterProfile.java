@@ -1,4 +1,4 @@
-package me.workhive.workhive.model;
+package me.workhive.workhive.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,23 +9,21 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
+@Table(name = "recruiters")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "companies")
-public class Company {
+public class RecruiterProfile {
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true, nullable = false)
-    private String name;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column
-    private String location;
-
-    @Column
-    private String sector;
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 }

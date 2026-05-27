@@ -1,12 +1,12 @@
-package me.workhive.workhive.controller;
+package me.workhive.workhive.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.workhive.workhive.dto.request.CandidateRegisterRequest;
-import me.workhive.workhive.dto.request.LoginRequest;
-import me.workhive.workhive.dto.request.RecruiterRegisterRequest;
-import me.workhive.workhive.dto.response.AuthResponse;
-import me.workhive.workhive.service.impl.AuthServiceImpl;
+import me.workhive.workhive.domain.dto.request.CandidateRegisterRequest;
+import me.workhive.workhive.domain.dto.request.LoginRequest;
+import me.workhive.workhive.domain.dto.request.RecruiterRegisterRequest;
+import me.workhive.workhive.domain.dto.response.AuthResponse;
+import me.workhive.workhive.services.impl.AuthServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

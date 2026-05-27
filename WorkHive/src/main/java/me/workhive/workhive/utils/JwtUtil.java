@@ -1,7 +1,7 @@
-package me.workhive.workhive.util;
+package me.workhive.workhive.utils;
 
 
-import me.workhive.workhive.model.User;
+import me.workhive.workhive.domain.entities.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

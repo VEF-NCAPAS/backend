@@ -1,6 +1,6 @@
-package me.workhive.workhive.repository;
+package me.workhive.workhive.repositories;
 
-import me.workhive.workhive.model.Company;
+import me.workhive.workhive.domain.entities.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

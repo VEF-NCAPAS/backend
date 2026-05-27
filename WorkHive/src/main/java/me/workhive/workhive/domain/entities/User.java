@@ -1,12 +1,12 @@
-package me.workhive.workhive.model;
+package me.workhive.workhive.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.workhive.workhive.model.enums.Gender;
-import me.workhive.workhive.model.enums.Role;
+import me.workhive.workhive.domain.entities.enums.Gender;
+import me.workhive.workhive.domain.entities.enums.Role;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

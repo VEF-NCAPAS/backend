@@ -1,8 +1,8 @@
-package me.workhive.workhive.dto.response;
+package me.workhive.workhive.domain.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import me.workhive.workhive.model.enums.Role;
+import me.workhive.workhive.domain.entities.enums.Role;
 
 @Data
 @AllArgsConstructor
