@@ -24,9 +24,10 @@ public class RecruiterRegisterRequest {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Pattern(regexp = "^.{6,}$", message = "Password must be at least 6 characters")
-    private String password;
-
+    @Pattern(
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
+            message = "Password must be at least 8 characters and include uppercase, lowercase, number and special character"
+    )    private String password;
     @NotNull(message = "Company selection is required")
     private CompanySelection company;
 }
