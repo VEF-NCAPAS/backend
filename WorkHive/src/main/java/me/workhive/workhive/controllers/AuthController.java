@@ -6,7 +6,10 @@ import me.workhive.workhive.domain.dto.request.CandidateRegisterRequest;
 import me.workhive.workhive.domain.dto.request.LoginRequest;
 import me.workhive.workhive.domain.dto.request.RecruiterRegisterRequest;
 import me.workhive.workhive.domain.dto.response.AuthResponse;
+import me.workhive.workhive.domain.dto.response.GeneralResponse;
 import me.workhive.workhive.services.impl.AuthServiceImpl;
+import me.workhive.workhive.utils.ResponseFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,28 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthServiceImpl authService;
+    private final ResponseFactory responseFactory;
 
     @PostMapping("/register/candidate")
-    public ResponseEntity<AuthResponse> registerCandidate(@Valid @RequestBody CandidateRegisterRequest registerRequest){
-        return ResponseEntity.ok(
+    public ResponseEntity<GeneralResponse> registerCandidate(@Valid @RequestBody CandidateRegisterRequest registerRequest){
+        return responseFactory.buildResponse(
+                "Candidate registered",
+                HttpStatus.CREATED,
                 authService.registerCandidate(registerRequest)
         );
     }
 
     @PostMapping("/register/recruiter")
-    public ResponseEntity<AuthResponse> registerRecruiter(@Valid @RequestBody RecruiterRegisterRequest registerRequest){
-        return ResponseEntity.ok(
+    public ResponseEntity<GeneralResponse> registerRecruiter(@Valid @RequestBody RecruiterRegisterRequest registerRequest){
+        return responseFactory.buildResponse(
+                "Recruiter registered",
+                HttpStatus.CREATED,
                 authService.registerRecruiter(registerRequest)
         );
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(
-            @Valid @RequestBody LoginRequest request
-    ) {
-
-        return ResponseEntity.ok(
+    public ResponseEntity<GeneralResponse> login(@Valid @RequestBody LoginRequest request) {
+        return responseFactory.buildResponse(
+                "Login successful",
+                HttpStatus.OK,
                 authService.login(request)
+
         );
     }
 
