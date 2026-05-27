@@ -1,15 +1,20 @@
 package me.workhive.workhive.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import me.workhive.workhive.common.mappers.AuthMapper;
 import me.workhive.workhive.domain.dto.request.CandidateRegisterRequest;
 import me.workhive.workhive.domain.dto.request.LoginRequest;
 import me.workhive.workhive.domain.dto.request.RecruiterRegisterRequest;
 import me.workhive.workhive.domain.dto.response.AuthResponse;
+import me.workhive.workhive.domain.dto.response.RegisterResponse;
 import me.workhive.workhive.domain.entities.CandidateProfile;
 import me.workhive.workhive.domain.entities.Company;
 import me.workhive.workhive.domain.entities.RecruiterProfile;
 import me.workhive.workhive.domain.entities.User;
 import me.workhive.workhive.domain.entities.enums.Role;
+import me.workhive.workhive.exceptions.DuplicatedResourceException;
+import me.workhive.workhive.exceptions.InvalidCredentialsException;
+import me.workhive.workhive.exceptions.ResourceNotFoundException;
 import me.workhive.workhive.repositories.CandidateRepository;
 import me.workhive.workhive.repositories.CompanyRepository;
 import me.workhive.workhive.repositories.RecruiterRepository;
@@ -29,116 +34,68 @@ public class AuthServiceImpl implements AuthService {
 
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final AuthMapper authMapper;
 
     @Override
-    public AuthResponse registerCandidate(CandidateRegisterRequest request) {
+    public RegisterResponse registerCandidate(CandidateRegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new DuplicatedResourceException("Email already exists");
         }
-
-        User user = User.builder()
-                .name(request.getName())
-                .gender(request.getGender())
-                .email(request.getEmail())
-                .password(
-                        passwordEncoder.encode(request.getPassword())
-                )
-                .role(Role.CANDIDATE)
-                .build();
-
+        User user = authMapper.toUserCandidateCreate(request, passwordEncoder);
         userRepository.save(user);
 
-        CandidateProfile candidateProfile = CandidateProfile.builder()
-                .user(user)
-                .build();
+        CandidateProfile profile = authMapper.toCandidateProfile(user);
+        userRepository.save(user);
 
-        candidateProfileRepository.save(candidateProfile);
+        candidateProfileRepository.save(profile);
 
-        String token = jwtUtil.generateToken(user);
-
-        return new AuthResponse(
-                token,
-                user.getEmail(),
-                user.getRole(),
-                "Logged in successfully as " + user.getRole().name()
-        );
+        return authMapper.toRegisterDto(user);
     }
 
     @Override
-    public AuthResponse registerRecruiter(RecruiterRegisterRequest request) {
+    public RegisterResponse registerRecruiter(RecruiterRegisterRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw new DuplicatedResourceException("Email already exists");
         }
 
         Company company;
 
-        if (request.getCompanyId() != null) {
+        if (request.getCompany().getCompanyId() != null) {
 
-            company = companyRepository.findById(request.getCompanyId())
-                    .orElseThrow(() ->
-                    new RuntimeException("Company not found"));
+            company = companyRepository.findById(request.getCompany().getCompanyId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
         } else {
-            company = Company.builder()
-                    .name(request.getCompanyName())
-                    .location(request.getLocation())
-                    .sector(request.getSector())
-                    .build();
-
-            companyRepository.save(company);
+            company = companyRepository.save(authMapper.toCompanyCreate(request.getCompany()));
         }
 
-        User user = User.builder()
-                .name(request.getName())
-                .gender(request.getGender())
-                .email(request.getEmail())
-                .password(
-                        passwordEncoder.encode(request.getPassword())
-                )
-                .role(Role.RECRUITER)
-                .build();
-
+        User user = authMapper.toUserRecruiterCreate(request, passwordEncoder);
         userRepository.save(user);
 
-        RecruiterProfile recruiterProfile =
-                RecruiterProfile.builder()
-                        .user(user)
-                        .company(company)
-                        .build();
+        RecruiterProfile profile = authMapper.toRecruiterProfile(user, company);
+        recruiterProfileRepository.save(profile);
 
-        recruiterProfileRepository.save(recruiterProfile);
+        return authMapper.toRegisterDto(user);
 
-        String token = jwtUtil.generateToken(user);
-
-        return new AuthResponse(
-                token,
-                user.getEmail(),
-                user.getRole(),
-                "Logged in successfully as " + user.getRole().name()
-        );
     }
 
     @Override
     public AuthResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+                .orElseThrow(() -> new ResourceNotFoundException("User no registered"));
 
         boolean isValidPassword = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if (!isValidPassword) {
-            throw new RuntimeException("Invalid credentials");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(user);
-        return new AuthResponse(
-                token,
-                user.getEmail(),
-                user.getRole(),
-                "Logged in successfully as " + user.getRole().name()
-        );
+
+        return authMapper.toAuthDto(user, token);
     }
 
 }

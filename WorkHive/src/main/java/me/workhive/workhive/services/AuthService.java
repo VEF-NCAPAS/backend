@@ -4,13 +4,14 @@ import me.workhive.workhive.domain.dto.request.CandidateRegisterRequest;
 import me.workhive.workhive.domain.dto.request.LoginRequest;
 import me.workhive.workhive.domain.dto.request.RecruiterRegisterRequest;
 import me.workhive.workhive.domain.dto.response.AuthResponse;
+import me.workhive.workhive.domain.dto.response.RegisterResponse;
 
 public interface AuthService {
-    AuthResponse registerCandidate(
+    RegisterResponse registerCandidate(
             CandidateRegisterRequest request
     );
 
-    AuthResponse registerRecruiter(
+    RegisterResponse registerRecruiter(
             RecruiterRegisterRequest request
     );
 
