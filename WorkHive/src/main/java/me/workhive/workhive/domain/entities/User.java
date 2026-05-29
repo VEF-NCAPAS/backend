@@ -1,10 +1,7 @@
 package me.workhive.workhive.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import me.workhive.workhive.domain.entities.enums.Gender;
 import me.workhive.workhive.domain.entities.enums.Role;
 
@@ -39,6 +36,14 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private CandidateProfile candidateProfile;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private RecruiterProfile recruiterProfile;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
