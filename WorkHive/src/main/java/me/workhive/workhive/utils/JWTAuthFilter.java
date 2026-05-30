@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import me.workhive.workhive.domain.entities.User;
+import me.workhive.workhive.repositories.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,7 @@ import java.util.List;
 public class JWTAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -29,27 +32,37 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
 
-        final String token;
-
-        if (authHeader == null || !authHeader.startsWith("Bearer")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        token = authHeader.substring(7);
+        String token = authHeader.substring(7);
 
-        if (jwtUtil.validateToken(token)){
+        if (!jwtUtil.validateToken(token)){
             filterChain.doFilter(request,response);
             return;
         }
 
         String email = jwtUtil.extractEmail(token);
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElse(null);
+
+        if (user == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
-                        email,
+                        user,
                         null,
                         List.of(
-                                new SimpleGrantedAuthority("USER")
+                                new SimpleGrantedAuthority(
+                                        "ROLE_" + user.getRole().name()
+                                )
                         )
                 );
 
