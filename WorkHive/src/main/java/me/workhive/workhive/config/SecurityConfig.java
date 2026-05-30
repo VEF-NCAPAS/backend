@@ -1,18 +1,30 @@
 package me.workhive.workhive.config;
 
-import lombok.RequiredArgsConstructor;
+import me.workhive.workhive.utils.JWTAuthFilter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig{
+    private final JWTAuthFilter jwtFilter;
+    private final HandlerExceptionResolver resolver;
+
+    public SecurityConfig(JWTAuthFilter jwtFilter, @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+        this.jwtFilter = jwtFilter;
+        this.resolver = resolver;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
         return http
@@ -20,6 +32,16 @@ public class SecurityConfig{
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) ->
+                                resolver.resolveException(request, response, null, authException))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                resolver.resolveException(request, response, null, accessDeniedException))
+                )
+                .addFilterBefore(
+                        jwtFilter,
+                        UsernamePasswordAuthenticationFilter.class
                 )
 
                 .build();

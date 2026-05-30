@@ -28,7 +28,7 @@ public class JwtUtil {
         long now = System.currentTimeMillis();
         long exp = now + expirationMs;
 
-        String payload = base64Url(buildPayload(user.getEmail(), user.getId(), now, exp)
+        String payload = base64Url(buildPayload(user.getEmail(), user.getId(), user.getRole().name(), now, exp)
                 .getBytes(StandardCharsets.UTF_8));
 
         String signingInput = HEADER + "." + payload;
@@ -62,10 +62,21 @@ public class JwtUtil {
         return extractStringClaim(payloadJson, "sub");
     }
 
-    private String buildPayload(String email, UUID userId, long iat, long exp) {
+    public String extractRole(String token) {
+
+        String[] parts = splitToken(token);
+        if (parts == null) {
+            throw new IllegalArgumentException("Invalid token");
+        }
+        String payloadJson = decodeBase64Url(parts[1]);
+        return extractStringClaim(payloadJson, "role");
+    }
+
+    private String buildPayload(String email, UUID userId, String role,long iat, long exp) {
         return "{" +
                 "\"sub\":\"" + email + "\"," +
                 "\"userId\":\"" + userId + "\"," +
+                "\"role\":\"" + role + "\"," +
                 "\"iat\":" + iat + "," +
                 "\"exp\":" + exp +
                 "}";
