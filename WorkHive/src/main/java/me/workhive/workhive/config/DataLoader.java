@@ -1,7 +1,9 @@
 package me.workhive.workhive.config;
 
 import lombok.RequiredArgsConstructor;
+import me.workhive.workhive.domain.entities.Requirement;
 import me.workhive.workhive.domain.entities.Skill;
+import me.workhive.workhive.repositories.RequirementRepository;
 import me.workhive.workhive.repositories.SkillRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -13,10 +15,11 @@ import java.util.List;
 public class DataLoader implements CommandLineRunner {
 
     private final SkillRepository skillRepository;
+    private final RequirementRepository requirementRepository;
 
     @Override
     public void run(String... args){
-        List<String> skills = List.of(
+        List<String> technologies = List.of(
                 "Java",
                 "Spring Boot",
                 "JavaScript",
@@ -39,11 +42,21 @@ public class DataLoader implements CommandLineRunner {
                 "Linux"
         );
 
-        skills.forEach(skillName -> {
+        technologies.forEach(skillName -> {
             if (!skillRepository.existsByName(skillName)) {
                 skillRepository.save(
                         Skill.builder()
                                 .name(skillName)
+                                .build()
+                );
+            }
+        });
+
+        technologies.forEach(requirementName -> {
+            if (!requirementRepository.existsByName(requirementName)) {
+                requirementRepository.save(
+                        Requirement.builder()
+                                .name(requirementName)
                                 .build()
                 );
             }
