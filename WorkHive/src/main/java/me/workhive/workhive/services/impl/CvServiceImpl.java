@@ -10,12 +10,12 @@ import me.workhive.workhive.domain.dto.request.SkillSelection;
 import me.workhive.workhive.domain.dto.request.UpdateCvRequest;
 import me.workhive.workhive.domain.dto.response.CvResponse;
 import me.workhive.workhive.domain.entities.*;
+import me.workhive.workhive.exceptions.AccessDeniedException;
 import me.workhive.workhive.exceptions.ResourceNotFoundException;
 import me.workhive.workhive.repositories.CandidateRepository;
 import me.workhive.workhive.repositories.CvRepository;
 import me.workhive.workhive.repositories.SkillRepository;
 import me.workhive.workhive.repositories.UserRepository;
-import me.workhive.workhive.exceptions.DeniedAccessException;
 import me.workhive.workhive.services.CvService;
 import org.springframework.stereotype.Service;
 
@@ -112,7 +112,7 @@ public class CvServiceImpl implements CvService {
 
         if (!existingCv.getCandidateProfile().getId()
                 .equals(candidate.getId())) {
-            throw new DeniedAccessException("You cannot edit another candidate's cv");
+            throw new AccessDeniedException("You cannot edit another candidate's cv");
         }
         List<UUID> skillIds = request.getSkills()
                 .stream()
@@ -158,7 +158,7 @@ public class CvServiceImpl implements CvService {
 
         if (!existsCv.getCandidateProfileId()
                 .equals(candidate.getId())) {
-            throw new DeniedAccessException(
+            throw new AccessDeniedException(
                     "You cannot delete cvs from another candidate"
             );
         }
