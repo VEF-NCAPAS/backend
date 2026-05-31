@@ -3,6 +3,8 @@ package me.workhive.workhive.exceptions;
 import me.workhive.workhive.domain.dto.response.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,8 +30,8 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiErrorResponse> handlerAccessDeniedException(AccessDeniedException e){
+    @ExceptionHandler(DeniedAccessException.class)
+    public ResponseEntity<ApiErrorResponse> handlerAccessDeniedException(DeniedAccessException e){
         return buildErrorResponse(HttpStatus.FORBIDDEN, e.getMessage());
     }
 
@@ -53,6 +55,16 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
+    //ver si se pueden unificar con los otros 401 y 403
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthenticationException(Exception e) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Full authentication is required to access this resource");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(Exception e) {
+        return buildErrorResponse(HttpStatus.FORBIDDEN, "You don't have permission to access this resource");
+    }
     public ResponseEntity<ApiErrorResponse> buildErrorResponse(HttpStatus status, Object message){
         String uri = ServletUriComponentsBuilder.fromCurrentRequestUri().build().getPath();
         return  ResponseEntity

@@ -1,7 +1,7 @@
 package me.workhive.workhive.exceptions;
 
-public class AccessDeniedException extends RuntimeException {
-    public AccessDeniedException(String message) {
+public class DeniedAccessException extends RuntimeException {
+    public DeniedAccessException(String message) {
         super(message);
     }
 }
