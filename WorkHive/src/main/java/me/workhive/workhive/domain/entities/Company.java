@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -28,4 +29,11 @@ public class Company {
 
     @Column
     private String sector;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecruiterProfile> recruiters;
+
+    @OneToMany(mappedBy = "company")
+    private List<Vacancy> vacancies;
+
 }

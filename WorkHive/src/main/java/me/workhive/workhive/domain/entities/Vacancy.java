@@ -55,6 +55,9 @@ public class Vacancy {
     @Column(nullable = false)
     private LocalDate publicationDate;
 
+    @OneToMany(mappedBy = "vacancy")
+    private List<Application> applications;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
