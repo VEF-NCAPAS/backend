@@ -181,17 +181,18 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public VacancyResponse deleteVacancy(UUID id,  User user){
-        VacancyResponse existsVacancy = this.getVacancyById(id);
+        Vacancy vacancy = this.findVacancyById(id);
         RecruiterProfile recruiter = this.findRecruiter(user);
 
-        if (!existsVacancy.getCompany().getId()
+        if (!vacancy.getCompany().getId()
                 .equals(recruiter.getCompany().getId())) {
             throw new DeniedAccessException(
                     "You cannot delete vacancies from another company"
             );
         }
-        vacancyRepository.deleteById(id);
-        return existsVacancy;
+        VacancyResponse response = vacancyMapper.toVacancyDto(vacancy);
+        vacancyRepository.delete(vacancy);
+        return response;
     }
 
     public Vacancy findVacancyById(UUID id){
