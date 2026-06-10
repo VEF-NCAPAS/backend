@@ -153,6 +153,55 @@ public class ApplicationServiceImpl implements ApplicationService {
         throw new DeniedAccessException("Role not authorized");
     }
 
+    @Override
+    public PageableResponse<? extends ApplicationResponse> getApplicationsByVacancy(
+            UUID vacancyId,
+            String skill,
+            int page,
+            int size,
+            User user
+    ) {
+
+        RecruiterProfile recruiter = findRecruiter(user);
+        Vacancy vacancy = findVacancy(vacancyId);
+
+        if (!vacancy.getCompany().getId()
+                .equals(recruiter.getCompany().getId())) {
+
+            throw new DeniedAccessException(
+                    "You cannot access applications from another company"
+            );
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Application> applications =
+                applicationRepository.findByVacancy_Id(vacancyId, pageable);
+
+        if (skill != null && !skill.isBlank()) {
+
+            applications = new org.springframework.data.domain.PageImpl<>(
+                    applications.getContent()
+                            .stream()
+                            .filter(application ->
+                                    application.getCv()
+                                            .getSkills()
+                                            .stream()
+                                            .anyMatch(s ->
+                                                    s.getName()
+                                                            .equalsIgnoreCase(skill)
+                                            )
+                            )
+                            .toList(),
+                    pageable,
+                    applications.getTotalElements()
+            );
+        }
+
+        Page<ApplicationRecruiterResponse> applicationPage = applicationMapper.toDtoApplicationRecruiterList(applications);
+
+        return buildPageResponse(applicationPage);
+    }
 
     @Transactional
     @Override

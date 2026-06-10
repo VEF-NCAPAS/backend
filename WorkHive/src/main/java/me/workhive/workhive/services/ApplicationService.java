@@ -18,6 +18,13 @@ public interface ApplicationService {
             String sortOrder,
             User user
     );
+    PageableResponse<? extends ApplicationResponse> getApplicationsByVacancy(
+            UUID vacancyId,
+            String skill,
+            int page,
+            int size,
+            User user
+    );
 
     ApplicationResponse withdrawApplication(UUID id, User user);
     ApplicationResponse reviewApplication(UUID id, User user);

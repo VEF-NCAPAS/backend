@@ -75,6 +75,29 @@ public class ApplicationController {
         );
     }
 
+    @GetMapping("/vacancy/{vacancyId}")
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<GeneralResponse> getApplicationsByVacancy(
+            @PathVariable UUID vacancyId,
+            @RequestParam(required = false) String skill,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal User user
+    ) {
+
+        return responseFactory.buildResponse(
+                "Applications retrieved successfully",
+                HttpStatus.OK,
+                applicationService.getApplicationsByVacancy(
+                        vacancyId,
+                        skill,
+                        page,
+                        size,
+                        user
+                )
+        );
+    }
+
     @PatchMapping("/{id}/withdraw")
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<GeneralResponse> withdrawApplication(
