@@ -7,7 +7,7 @@ import me.workhive.workhive.domain.dto.request.UpdateVacancyRequest;
 import me.workhive.workhive.domain.dto.response.GeneralResponse;
 import me.workhive.workhive.domain.entities.User;
 import me.workhive.workhive.domain.entities.enums.Modality;
-import me.workhive.workhive.services.impl.VacancyServiceImpl;
+import me.workhive.workhive.services.VacancyService;
 import me.workhive.workhive.utils.ResponseFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequestMapping("/vacancy")
 @RequiredArgsConstructor
 public class VacancyController {
-    public final VacancyServiceImpl vacancyService;
+    public final VacancyService vacancyService;
     public final ResponseFactory responseFactory;
 
     @PostMapping
