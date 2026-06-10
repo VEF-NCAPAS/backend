@@ -19,6 +19,8 @@ import me.workhive.workhive.exceptions.DeniedAccessException;
 import me.workhive.workhive.exceptions.ResourceNotFoundException;
 import me.workhive.workhive.repositories.*;
 import me.workhive.workhive.services.ApplicationService;
+import me.workhive.workhive.services.EmailService;
+import me.workhive.workhive.services.EmailTemplateService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +40,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final RecruiterRepository recruiterRepository;
     private final CvRepository cvRepository;
     private final ApplicationMapper applicationMapper;
+    private final EmailService emailService;
+    private final EmailTemplateService emailTemplateService;
 
 
     @Override
@@ -64,6 +68,17 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         Application saved = applicationRepository.save(application);
+        String html = emailTemplateService.appliedTemplate(
+                candidate.getUser().getName(),
+                vacancy.getTitle(),
+                vacancy.getCompany().getName()
+        );
+
+        emailService.sendHtmlEmail(
+                candidate.getUser().getEmail(),
+                "Postulación enviada",
+                html
+        );
         return applicationMapper.toApplicationCandidateDto(saved);
     }
 
@@ -165,9 +180,20 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         application.setApplicationStatus(ApplicationStatus.WITHDRAWN);
 
-        return applicationMapper.toApplicationCandidateDto(
-                applicationRepository.save(application)
+        Application saved = applicationRepository.save(application);
+
+        String html = emailTemplateService.withdrawnTemplate(
+                saved.getCandidate().getUser().getName(),
+                saved.getVacancy().getTitle()
         );
+
+        emailService.sendHtmlEmail(
+                saved.getCandidate().getUser().getEmail(),
+                "Postulación retirada",
+                html
+        );
+
+        return applicationMapper.toApplicationCandidateDto(saved);
     }
 
     @Transactional
@@ -199,13 +225,20 @@ public class ApplicationServiceImpl implements ApplicationService {
             );
         }
 
-        application.setApplicationStatus(
-                ApplicationStatus.REVIEWED
+        application.setApplicationStatus(ApplicationStatus.REVIEWED);
+
+        Application saved = applicationRepository.save(application);
+        String html = emailTemplateService.reviewedTemplate(
+                application.getCandidate().getUser().getName(),
+                application.getVacancy().getTitle()
         );
 
-        return applicationMapper.toApplicationRecruiterDto(
-                applicationRepository.save(application)
+        emailService.sendHtmlEmail(
+                application.getCandidate().getUser().getEmail(),
+                "Postulación revisada",
+                html
         );
+        return applicationMapper.toApplicationRecruiterDto(saved);
     }
 
     @Transactional
@@ -247,10 +280,38 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         application.setApplicationStatus(request.getStatus());
+        Application saved = applicationRepository.save(application);
 
-        return applicationMapper.toApplicationRecruiterDto(
-                applicationRepository.save(application)
-        );
+        String html;
+
+        if (saved.getApplicationStatus() == ApplicationStatus.SELECTED) {
+
+            html = emailTemplateService.selectedTemplate(
+                    saved.getCandidate().getUser().getName(),
+                    saved.getVacancy().getTitle()
+            );
+
+            emailService.sendHtmlEmail(
+                    saved.getCandidate().getUser().getEmail(),
+                    "¡Has sido seleccionado!",
+                    html
+            );
+
+        } else {
+
+            html = emailTemplateService.rejectedTemplate(
+                    saved.getCandidate().getUser().getName(),
+                    saved.getVacancy().getTitle()
+            );
+
+            emailService.sendHtmlEmail(
+                    saved.getCandidate().getUser().getEmail(),
+                    "Actualización de postulación",
+                    html
+            );
+        }
+
+        return applicationMapper.toApplicationRecruiterDto(saved);
     }
     private Application findApplication(UUID id) {
         return applicationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Application not found"));

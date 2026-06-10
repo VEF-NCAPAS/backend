@@ -14,6 +14,8 @@ import me.workhive.workhive.exceptions.ResourceNotFoundException;
 import me.workhive.workhive.repositories.ApplicationRepository;
 import me.workhive.workhive.repositories.RecruiterRepository;
 import me.workhive.workhive.repositories.TechnicalTestRepository;
+import me.workhive.workhive.services.EmailService;
+import me.workhive.workhive.services.EmailTemplateService;
 import me.workhive.workhive.services.TechnicalTestService;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ public class TechnicalTestServiceImpl implements TechnicalTestService {
     private final ApplicationRepository applicationRepository;
     private final RecruiterRepository recruiterRepository;
     private final TechnicalTestMapper technicalTestMapper;
+    private final EmailService emailService;
+    private final EmailTemplateService emailTemplateService;
 
 
     @Transactional
@@ -56,7 +60,20 @@ public class TechnicalTestServiceImpl implements TechnicalTestService {
         TechnicalTest technicalTest = technicalTestMapper.toTechnicalTestCreate(request, application);
         application.setApplicationStatus(ApplicationStatus.TECHNICAL_TEST);
         applicationRepository.save(application);
-        return technicalTestMapper.toTechnicalTestDto (technicalTestRepository.save(technicalTest));
+        TechnicalTest savedTest = technicalTestRepository.save(technicalTest);
+        String html = emailTemplateService.technicalTestTemplate(
+                application.getCandidate().getUser().getName(),
+                application.getVacancy().getTitle(),
+                savedTest.getLink(),
+                savedTest.getDeadline()
+        );
+
+        emailService.sendHtmlEmail(
+                application.getCandidate().getUser().getEmail(),
+                "Prueba técnica asignada",
+                html
+        );
+        return technicalTestMapper.toTechnicalTestDto (savedTest);
     }
 
     @Transactional

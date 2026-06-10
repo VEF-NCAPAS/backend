@@ -15,6 +15,8 @@ import me.workhive.workhive.exceptions.ResourceNotFoundException;
 import me.workhive.workhive.repositories.ApplicationRepository;
 import me.workhive.workhive.repositories.InterviewRepository;
 import me.workhive.workhive.repositories.RecruiterRepository;
+import me.workhive.workhive.services.EmailService;
+import me.workhive.workhive.services.EmailTemplateService;
 import me.workhive.workhive.services.InterviewService;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ public class InterviewServiceImpl implements InterviewService {
     private final ApplicationRepository applicationRepository;
     private final RecruiterRepository recruiterRepository;
     private final InterviewMapper interviewMapper;
+    private final EmailService emailService;
+    private final EmailTemplateService emailTemplateService;
 
     @Transactional
     @Override
@@ -57,10 +61,22 @@ public class InterviewServiceImpl implements InterviewService {
         Interview interview = interviewMapper.toInterviewCreate(request, application);
 
         application.setApplicationStatus(ApplicationStatus.INTERVIEW);
-
         applicationRepository.save(application);
+        Interview savedInterview = interviewRepository.save(interview);
 
-        return interviewMapper.toInterviewDto(interviewRepository.save(interview));
+        String html = emailTemplateService.interviewTemplate(
+                application.getCandidate().getUser().getName(),
+                application.getVacancy().getTitle(),
+                savedInterview.getInterviewDate(),
+                savedInterview.getMeetingLink()
+        );
+
+        emailService.sendHtmlEmail(
+                application.getCandidate().getUser().getEmail(),
+                "Entrevista programada",
+                html
+        );
+        return interviewMapper.toInterviewDto(savedInterview);
     }
 
     @Transactional
