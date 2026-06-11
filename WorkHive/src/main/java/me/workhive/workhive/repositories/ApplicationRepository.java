@@ -15,4 +15,5 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
 
     Page<Application> findByVacancy_CompanyId(UUID vacancyCompanyId, Pageable pageable);
     boolean existsByCandidateAndVacancy(CandidateProfile candidate, Vacancy vacancy);
+    Page<Application> findByVacancy_Id(UUID vacancyId, Pageable pageable);
 }
