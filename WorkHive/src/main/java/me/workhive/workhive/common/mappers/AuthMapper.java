@@ -57,6 +57,7 @@ public class AuthMapper {
 //    para desarrollo mostrar token, luego cambiar
     public AuthResponse toAuthDto(User user, String token) {
         return AuthResponse.builder()
+                .name(user.getName())
                 .token(token)
                 .email(user.getEmail())
                 .role(user.getRole())
