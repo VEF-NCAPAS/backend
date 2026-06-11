@@ -10,6 +10,8 @@ import me.workhive.workhive.domain.entities.enums.Role;
 @Builder
 public class AuthResponse {
 
+    private String name;
+    
     private String token;
 
     private String email;
