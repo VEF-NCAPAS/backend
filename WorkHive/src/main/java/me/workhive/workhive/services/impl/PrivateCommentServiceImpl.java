@@ -42,10 +42,10 @@ public class PrivateCommentServiceImpl implements PrivateCommentService {
 
     @Override
     @Transactional
-    public PrivateCommentResponse createPrivateComment(CreatePrivateCommentRequest request, UUID applicationId, User user) {
+    public PrivateCommentResponse createPrivateComment(CreatePrivateCommentRequest request, User user) {
         RecruiterProfile recruiter = findRecruiter(user);
 
-        Application application = findApplication(applicationId);
+        Application application = findApplication(request.getApplicationId());
 
         if (!application.getVacancy()
                 .getCompany()

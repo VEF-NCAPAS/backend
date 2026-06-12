@@ -27,14 +27,13 @@ public class PrivateCommentController {
     @PostMapping
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> createComment(
-            @PathVariable UUID applicationId,
             @Valid @RequestBody CreatePrivateCommentRequest request,
             @AuthenticationPrincipal User user
     ) {
         return responseFactory.buildResponse(
                 "Private comment created successfully",
                 HttpStatus.CREATED,
-                privateCommentService.createPrivateComment(request,applicationId,user)
+                privateCommentService.createPrivateComment(request,user)
         );
     }
 

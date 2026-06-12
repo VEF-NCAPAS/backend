@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface PrivateCommentService {
 
-    PrivateCommentResponse createPrivateComment(CreatePrivateCommentRequest request, UUID applicationId, User user);
+    PrivateCommentResponse createPrivateComment(CreatePrivateCommentRequest request, User user);
     PageableResponse<PrivateCommentResponse> getCommentsByApplication(
             UUID applicationId,
             int page,
