@@ -3,7 +3,6 @@ package me.workhive.workhive.services.impl;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.common.mappers.AuthMapper;
 import me.workhive.workhive.domain.dto.request.CandidateRegisterRequest;
-import me.workhive.workhive.domain.dto.request.ChangePasswordRequest;
 import me.workhive.workhive.domain.dto.request.LoginRequest;
 import me.workhive.workhive.domain.dto.request.RecruiterRegisterRequest;
 import me.workhive.workhive.domain.dto.response.AuthResponse;
@@ -12,7 +11,6 @@ import me.workhive.workhive.domain.entities.CandidateProfile;
 import me.workhive.workhive.domain.entities.Company;
 import me.workhive.workhive.domain.entities.RecruiterProfile;
 import me.workhive.workhive.domain.entities.User;
-import me.workhive.workhive.domain.entities.enums.Role;
 import me.workhive.workhive.exceptions.DuplicatedResourceException;
 import me.workhive.workhive.exceptions.InvalidCredentialsException;
 import me.workhive.workhive.exceptions.ResourceNotFoundException;
@@ -98,22 +96,5 @@ public class AuthServiceImpl implements AuthService {
 
         return authMapper.toAuthDto(user, token);
     }
-    @Override
-    public void changePassword(User user, ChangePasswordRequest request) {
 
-        boolean matches = passwordEncoder.matches(
-                request.getCurrentPassword(),
-                user.getPassword()
-        );
-
-        if (!matches) {
-            throw new InvalidCredentialsException("Current password is incorrect");
-        }
-
-        user.setPassword(
-                passwordEncoder.encode(request.getNewPassword())
-        );
-
-        userRepository.save(user);
-    }
 }

@@ -32,8 +32,7 @@ public class SecurityConfig{
                 .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login",
-                                "/auth/register/**")
+                        .requestMatchers("/auth/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/company")
                         .permitAll()
