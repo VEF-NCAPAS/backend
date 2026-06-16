@@ -3,25 +3,24 @@ package me.workhive.workhive.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CandidateRegisterRequest;
+import me.workhive.workhive.domain.dto.request.ChangePasswordRequest;
 import me.workhive.workhive.domain.dto.request.LoginRequest;
 import me.workhive.workhive.domain.dto.request.RecruiterRegisterRequest;
-import me.workhive.workhive.domain.dto.response.AuthResponse;
 import me.workhive.workhive.domain.dto.response.GeneralResponse;
-import me.workhive.workhive.services.impl.AuthServiceImpl;
+import me.workhive.workhive.domain.entities.User;
+import me.workhive.workhive.services.AuthService;
 import me.workhive.workhive.utils.ResponseFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthServiceImpl authService;
+    private final AuthService authService;
     private final ResponseFactory responseFactory;
 
     @PostMapping("/register/candidate")
@@ -50,6 +49,20 @@ public class AuthController {
                 authService.login(request)
 
         );
+    }
+    @PatchMapping("/change-password")
+    public ResponseEntity<?> changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        User currentUser = (User) authentication.getPrincipal();
+
+        authService.changePassword(
+                currentUser,
+                request
+        );
+
+        return ResponseEntity.ok("Password updated successfully");
     }
 
 }

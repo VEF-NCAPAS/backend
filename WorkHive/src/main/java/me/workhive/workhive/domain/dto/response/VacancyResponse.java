@@ -21,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class VacancyResponse {
     private UUID id;
-    private Company company;
+    private String companyName;
     private String title;
     private String description;
     private List<String> requirements;

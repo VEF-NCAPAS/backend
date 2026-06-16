@@ -42,8 +42,7 @@ public class VacancyMapper {
     public VacancyResponse toVacancyDto(Vacancy vacancy){
         return VacancyResponse.builder()
                 .id(vacancy.getId())
-                .company(vacancy.getCompany())
-                .title(vacancy.getTitle())
+                .companyName(vacancy.getCompany() != null ? vacancy.getCompany().getName() : null)                .title(vacancy.getTitle())
                 .description(vacancy.getDescription())
                 .requirements(vacancy.getRequirements() != null ?
                         vacancy.getRequirements().stream()

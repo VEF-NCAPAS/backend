@@ -1,29 +1,32 @@
 package me.workhive.workhive.domain.entities;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Data
-@Table(name = "candidates")
+@Table(name = "technical_tests")
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CandidateProfile {
+public class TechnicalTest  {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "application_id", nullable = false)
+    private Application application;
 
-    @OneToMany(mappedBy = "candidate")
-    private List<Application> applications;
+    @Column(nullable = false)
+    private String link;
+
+    private LocalDateTime deadline;
 }

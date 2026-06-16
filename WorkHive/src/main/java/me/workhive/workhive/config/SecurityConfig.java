@@ -4,6 +4,7 @@ import me.workhive.workhive.utils.JWTAuthFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,9 +29,14 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
         return http
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/login",
+                                "/auth/register/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/company")
+                        .permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception

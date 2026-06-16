@@ -38,5 +38,6 @@ public class Cv {
     )
     private List<Skill> skills;
 
-
+    @OneToMany(mappedBy = "cv")
+    private List<Application> applications;
 }

@@ -34,6 +34,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handlerAccessDeniedException(DeniedAccessException e){
         return buildErrorResponse(HttpStatus.FORBIDDEN, e.getMessage());
     }
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<ApiErrorResponse> handleBusinessRuleException(BusinessRuleException e) {
+        return buildErrorResponse(HttpStatus.CONFLICT, e.getMessage());
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidation(MethodArgumentNotValidException e) {
