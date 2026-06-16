@@ -35,8 +35,7 @@ public class SecurityConfig{
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login",
-                                "/auth/register/**")
+                        .requestMatchers("/auth/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/company")
                         .permitAll()
