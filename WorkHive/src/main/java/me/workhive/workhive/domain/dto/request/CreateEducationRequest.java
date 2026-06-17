@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateEducationRequest {
-    private String Institution;
+    private String institution;
 
     private String major;
 
-    private String description;//quitar
+    //private String description;//quitar
 }

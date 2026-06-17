@@ -53,6 +53,17 @@ public class CvController {
                 cvService.getCvById(id)
         );
     }
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public ResponseEntity<GeneralResponse> getMyCv(
+            @AuthenticationPrincipal User user
+    ) {
+        return responseFactory.buildResponse(
+                "CV retrieved successfully",
+                HttpStatus.OK,
+                cvService.getCvByCandidate(user)
+        );
+    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CANDIDATE')")

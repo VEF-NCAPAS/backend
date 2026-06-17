@@ -15,13 +15,13 @@ import java.util.UUID;
 public class ExperienceResponse {
     private UUID id;
 
-    private String Company;
+    private String company;
 
     private String position;
 
     private String description;
 
-    private LocalDate HireDate;
+    private LocalDate hireDate;
 
-    private LocalDate EndDate;
+    private LocalDate endDate;
 }

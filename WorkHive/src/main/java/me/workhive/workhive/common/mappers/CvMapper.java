@@ -45,6 +45,8 @@ public class CvMapper {
     public CvResponse toCvDto(Cv cv){
         return CvResponse.builder()
                 .id(cv.getId())
+                .name(cv.getCandidateProfile().getUser().getName())
+                .email(cv.getCandidateProfile().getUser().getEmail())
                 .candidateProfileId(cv.getCandidateProfile().getId())
                 .experiences(
                         cv.getExperiences() != null ?

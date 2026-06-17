@@ -14,9 +14,9 @@ import java.util.UUID;
 public class EducationResponse {
     private UUID id;
 
-    private String Institution;
+    private String institution;
 
     private String major;
 
-    private String description;
+    //private String description;
 }

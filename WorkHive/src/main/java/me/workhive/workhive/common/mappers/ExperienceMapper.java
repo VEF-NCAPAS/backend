@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class ExperienceMapper {
     public Experience toEntityCreate(CreateExperienceRequest request) {
         return Experience.builder()
-                .Company(request.getCompany())
+                .company(request.getCompany())
                 .position(request.getPosition())
                 .description(request.getDescription())
-                .HireDate(request.getHireDate())
-                .EndDate(request.getEndDate())
+                .hireDate(request.getHireDate())
+                .endDate(request.getEndDate())
                 .build();
     }
 
@@ -32,11 +32,11 @@ public class ExperienceMapper {
     public ExperienceResponse toDto(Experience experience){
         return ExperienceResponse.builder()
                 .id(experience.getId())
-                .Company(experience.getCompany())
+                .company(experience.getCompany())
                 .position(experience.getPosition())
                 .description(experience.getDescription())
-                .HireDate(experience.getHireDate())
-                .EndDate(experience.getEndDate())
+                .hireDate(experience.getHireDate())
+                .endDate(experience.getEndDate())
                 .build();
     }
     

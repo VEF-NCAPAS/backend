@@ -21,15 +21,15 @@ public class Experience {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String Company;
+    private String company;
 
     private String position;
 
     private String description;
 
-    private LocalDate HireDate;
+    private LocalDate hireDate;
 
-    private LocalDate EndDate;
+    private LocalDate endDate;
 
     @ManyToOne
     @JoinColumn(name = "cv_id", nullable = false)

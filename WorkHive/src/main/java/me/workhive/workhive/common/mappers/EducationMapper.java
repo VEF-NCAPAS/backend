@@ -11,7 +11,6 @@ public class EducationMapper {
         return Education.builder()
                 .Institution(request.getInstitution())
                 .major(request.getMajor())
-                .description(request.getDescription())
                 .build();
     }
 
@@ -30,9 +29,8 @@ public class EducationMapper {
     public EducationResponse toDto(Education education){
         return EducationResponse.builder()
                 .id(education.getId())
-                .Institution(education.getInstitution())
+                .institution(education.getInstitution())
                 .major(education.getMajor())
-                .description(education.getDescription())
                 .build();
     }
     

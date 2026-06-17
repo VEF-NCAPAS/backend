@@ -12,13 +12,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateExperienceRequest {
-    private String Company;
+    private String company;
 
     private String position;
 
     private String description;
 
-    private LocalDate HireDate;
+    private LocalDate hireDate;
 
-    private LocalDate EndDate;
+    private LocalDate endDate;
 }

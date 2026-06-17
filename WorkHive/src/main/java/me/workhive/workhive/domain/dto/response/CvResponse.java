@@ -18,6 +18,10 @@ public class CvResponse {
 
     private UUID candidateProfileId;
 
+    private String name;
+
+    private String email;
+
     private List<ExperienceResponse> experiences;
 
     private List<EducationResponse> education;

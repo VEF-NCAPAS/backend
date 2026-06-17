@@ -10,6 +10,7 @@ import me.workhive.workhive.domain.dto.request.SkillSelection;
 import me.workhive.workhive.domain.dto.request.UpdateCvRequest;
 import me.workhive.workhive.domain.dto.response.CvResponse;
 import me.workhive.workhive.domain.entities.*;
+import me.workhive.workhive.exceptions.BusinessRuleException;
 import me.workhive.workhive.exceptions.DeniedAccessException;
 import me.workhive.workhive.exceptions.ResourceNotFoundException;
 import me.workhive.workhive.repositories.CandidateRepository;
@@ -46,21 +47,21 @@ public class CvServiceImpl implements CvService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new RuntimeException("User not found")
+                        new ResourceNotFoundException("User not found")
                 );
 
         CandidateProfile candidateProfile =
                 candidateRepository
                         .findByUser(user)
                         .orElseThrow(() ->
-                                new RuntimeException(
+                                new ResourceNotFoundException(
                                         "Candidate profile not found"
                                 )
                         );
 
         if (cvRepository.existsByCandidateProfile(candidateProfile)) {
 
-            throw new RuntimeException(
+            throw new BusinessRuleException(
                     "Candidate already has a CV"
             );
         }
@@ -95,6 +96,17 @@ public class CvServiceImpl implements CvService {
         return cvMapper.toCvDto(savedCv);
     }
 
+    @Override
+    public CvResponse getCvByCandidate(User user) {
+
+        CandidateProfile candidate = candidateRepository
+                .findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        Cv cv = cvRepository
+                .findByCandidateProfile(candidate)
+                .orElseThrow(() -> new RuntimeException("CV not found"));
+        return cvMapper.toCvDto(cv);
+    }
     @Override
     public CvResponse getCvById(UUID id){
         return cvMapper.toCvDto(
