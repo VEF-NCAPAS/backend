@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CreateTechnicalTestRequest;
@@ -25,6 +26,10 @@ public class TechnicalTestController {
     private final ResponseFactory responseFactory;
 
     @PostMapping
+    @Operation(
+            summary = "Crear prueba tecnica",
+            description = "Usuario reclutador crea prueba tecnica"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> createTechnicalTest(
             @Valid @RequestBody CreateTechnicalTestRequest request,
@@ -39,6 +44,10 @@ public class TechnicalTestController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Actualizar prueba tecnica",
+            description = "Se puede actualizar cualquier dato de la prueba tecnica"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> updateTechnicalTest(
             @PathVariable UUID id,

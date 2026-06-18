@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.response.GeneralResponse;
 import me.workhive.workhive.services.SkillService;
@@ -22,6 +23,10 @@ public class SkillController {
     private final ResponseFactory responseFactory;
 
     @GetMapping
+    @Operation(
+            summary = "Obtener todos las habilidades",
+            description = "Candidato obtiene todos las habilidades disponibles"
+    )
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<GeneralResponse> getAllSkills(){
         return responseFactory.buildResponse(
@@ -32,6 +37,10 @@ public class SkillController {
     }
 
     @GetMapping(("/{id}"))
+    @Operation(
+            summary = "Obtener habilidades por id",
+            description = "Candidato obtiene las habilidades disponibles por id"
+    )
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<GeneralResponse> getSkillsById(
             @PathVariable UUID id

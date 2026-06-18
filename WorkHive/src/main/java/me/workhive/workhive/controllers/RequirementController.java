@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.response.GeneralResponse;
 import me.workhive.workhive.services.RequirementService;
@@ -23,6 +24,10 @@ public class RequirementController {
     private final ResponseFactory responseFactory;
 
     @GetMapping
+    @Operation(
+            summary = "Obtener todos los requeremientos",
+            description = "Reclutador obtiene todos los requerimientos disponibles"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> getAllRequirements() {
 
@@ -34,6 +39,10 @@ public class RequirementController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Obtener requerimientos por id",
+            description = "Reclutador obtiene los requerimientos disponibles por id"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> getRequirementById(
             @PathVariable UUID id

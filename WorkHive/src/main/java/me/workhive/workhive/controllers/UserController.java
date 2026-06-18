@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.ChangePasswordRequest;
@@ -19,6 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     private final UserService userService;
     @PatchMapping("/change-password")
+    @Operation(
+            summary = "Cambiar contraseña",
+            description = "Usuarios pueden cambiar su contraseña"
+    )
     @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER')")
     public ResponseEntity<?> changePassword(
             Authentication authentication,

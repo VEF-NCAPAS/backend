@@ -1,5 +1,6 @@
 package me.workhive.workhive.domain.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +19,10 @@ public class CandidateRegisterRequest {
 
     @Email(message = "Email invalid format")
     @NotBlank(message = "Email is required")
+    @Schema(
+            description = "Correo electrónico del usuario",
+            example = "email@example.com"
+    )
     private String email;
 
     @Pattern(
