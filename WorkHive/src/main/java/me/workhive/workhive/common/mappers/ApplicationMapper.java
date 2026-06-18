@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class ApplicationMapper {
     private final TechnicalTestMapper technicalTestMapper;
     private final InterviewMapper interviewMapper;
+    private final CvMapper cvMapper;
     public Application toApplicationCreate(CreateApplicationRequest request, CandidateProfile candidate,
                                            Vacancy vacancy, Cv cv) {
         return Application.builder()
@@ -50,6 +51,7 @@ public class ApplicationMapper {
                 .candidateEmail(application.getCandidate().getUser().getEmail())
                 .vacancyTitle(application.getVacancy().getTitle())
                 .coverLetter(application.getCoverLetter())
+                .cv(cvMapper.toCvDto(application.getCv()))
                 .applicationStatus(application.getApplicationStatus())
                 .applicationDate(application.getApplicationDate())
                 .technicalTest(application.getTechnicalTest() != null ?

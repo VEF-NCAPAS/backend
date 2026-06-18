@@ -91,7 +91,7 @@ public class ApplicationController {
     @GetMapping("/vacancy/{vacancyId}")
     @Operation(
             summary = "Obtener postulacion por id de vacante",
-            description = "Usuarios reclutadores pueden obtener las postulaciones relacionadas a una vacante"
+            description = "Usuarios reclutadores pueden obtener las postulaciones relacionadas a una vacante y filtrar por habilidad"
     )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> getApplicationsByVacancy(

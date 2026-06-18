@@ -27,7 +27,7 @@ public class SkillController {
             summary = "Obtener todos las habilidades",
             description = "Candidato obtiene todos las habilidades disponibles"
     )
-    @PreAuthorize("hasRole('CANDIDATE')")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER')")
     public ResponseEntity<GeneralResponse> getAllSkills(){
         return responseFactory.buildResponse(
                 "Skills retrieved successfully",
