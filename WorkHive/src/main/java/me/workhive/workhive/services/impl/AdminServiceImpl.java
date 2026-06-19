@@ -85,14 +85,10 @@ public class AdminServiceImpl implements AdminService {
         }
 
         if (request.getRole() == Role.RECRUITER) {
-            if (request.getCompany() == null) {
-                throw new BusinessRuleException("Company is required for recruiter users");
-            }
-
             RecruiterProfile recruiterProfile = recruiterRepository.save(
                     RecruiterProfile.builder()
                             .user(savedUser)
-                            .company(resolveCompany(request.getCompany()))
+                            .company(findExistingCompany(request.getCompany()))
                             .build()
             );
             savedUser.setRecruiterProfile(recruiterProfile);
@@ -202,7 +198,7 @@ public class AdminServiceImpl implements AdminService {
         if (user.getRole() == Role.RECRUITER && request.getCompany() != null) {
             RecruiterProfile recruiter = recruiterRepository.findByUser(user)
                     .orElseThrow(() -> new ResourceNotFoundException("Recruiter profile not found"));
-            recruiter.setCompany(resolveCompany(request.getCompany()));
+            recruiter.setCompany(findExistingCompany(request.getCompany()));
             recruiterRepository.save(recruiter);
             user.setRecruiterProfile(recruiter);
         }
@@ -338,24 +334,13 @@ public class AdminServiceImpl implements AdminService {
         return user;
     }
 
-    private Company resolveCompany(CompanySelection selection) {
-        if (selection.getCompanyId() != null) {
-            return companyRepository.findById(selection.getCompanyId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+    private Company findExistingCompany(CompanySelection selection) {
+        if (selection == null || selection.getCompanyId() == null) {
+            throw new BusinessRuleException("An existing company id is required for recruiter users");
         }
 
-        if (selection.getCompanyName() == null || selection.getCompanyName().isBlank()) {
-            throw new BusinessRuleException("Company name is required");
-        }
-
-        return companyRepository.findByName(selection.getCompanyName())
-                .orElseGet(() -> companyRepository.save(
-                Company.builder()
-                        .name(selection.getCompanyName())
-                        .location(selection.getLocation())
-                        .sector(selection.getSector())
-                        .build()
-        ));
+        return companyRepository.findById(selection.getCompanyId())
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
     }
 
     private void validateDateRange(LocalDate from, LocalDate to) {
