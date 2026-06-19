@@ -60,7 +60,7 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public PageableResponse<VacancyResponse> getAllVacancies(int page, int size, String sortBy, String sortOrder,
-                                                             String title, Modality modality, User user
+                                                             String title, Modality modality, VacancyStatus status, User user
     ) {
 
         Sort sort = sortOrder.equalsIgnoreCase("desc")
@@ -128,7 +128,27 @@ public class VacancyServiceImpl implements VacancyService {
                                 recruiter.getCompany(),
                                 pageable);
             }
-        }else {
+        } else if (user.getRole() == Role.ADMINISTRATOR) {
+            if (title != null && modality != null) {
+                vacancies = vacancyRepository.findByTitleContainingIgnoreCaseAndModalityAndStatus(
+                        title,
+                        modality,
+                        VacancyStatus.OPEN,
+                        pageable);
+            } else if (title != null) {
+                vacancies = vacancyRepository.findByTitleContainingIgnoreCaseAndStatus(
+                        title,
+                        VacancyStatus.OPEN,
+                        pageable);
+            } else if (modality != null) {
+                vacancies = vacancyRepository.findByModalityAndStatus(
+                        modality,
+                        VacancyStatus.OPEN,
+                        pageable);
+            } else {
+                vacancies = vacancyRepository.findAll(pageable);
+            }
+        } else {
 
             throw new DeniedAccessException(
                     "Role not authorized"
@@ -148,6 +168,7 @@ public class VacancyServiceImpl implements VacancyService {
                 .size(vacancyPage.getSize())
                 .totalElements(vacancyPage.getTotalElements())
                 .last(vacancyPage.isLast())
+                .totalPages(vacancyPage.getTotalPages())
                 .build();
     }
     @Override

@@ -6,13 +6,14 @@ import me.workhive.workhive.domain.dto.response.PageableResponse;
 import me.workhive.workhive.domain.dto.response.VacancyResponse;
 import me.workhive.workhive.domain.entities.User;
 import me.workhive.workhive.domain.entities.enums.Modality;
+import me.workhive.workhive.domain.entities.enums.VacancyStatus;
 
 import java.util.UUID;
 
 public interface VacancyService {
     VacancyResponse createVacancy(CreateVacancyRequest request, User user);
     PageableResponse<VacancyResponse> getAllVacancies( int page, int size, String sortBy, String sortOrder,
-                                                       String title, Modality modality, User user);
+                                                       String title, Modality modality, VacancyStatus status, User user);
     VacancyResponse getVacancyById(UUID id);
     VacancyResponse updateVacancy(UUID  id , UpdateVacancyRequest request, User user);
     VacancyResponse deleteVacancy(UUID id,  User user);
