@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import me.workhive.workhive.domain.entities.enums.VacancyStatus;
 
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class VacancyController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getAllVacancies(
             @RequestParam(defaultValue = "0")  int page,
             @RequestParam(defaultValue = "10") int size,
@@ -45,18 +46,19 @@ public class VacancyController {
             @RequestParam(defaultValue = "desc") String sortOrder,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Modality modality,
+            @RequestParam(required = false) VacancyStatus status,
             @AuthenticationPrincipal User user
     ) {
         return responseFactory.buildResponse(
                 "Vacancies retrieved successfully",
                 HttpStatus.OK,
                 vacancyService.getAllVacancies(page, size, sortBy, sortOrder,
-                        title, modality, user)
+                        title, modality,status,user)
         );
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getVacancyById(
             @PathVariable UUID id
     ) {
