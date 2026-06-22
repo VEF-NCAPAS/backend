@@ -16,19 +16,6 @@ public class ExperienceMapper {
                 .endDate(request.getEndDate())
                 .build();
     }
-
-    /*public Experience toEntityUpdate(UpdateExperienceRequest request, UUID id) {
-        return Experience.builder()
-                .id(id)
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .quantity(request.getQuantity())
-                .isAvailable(request.getIsAvailable())
-                .category(request.getCategory())
-                .build();
-    }*/
-
     public ExperienceResponse toDto(Experience experience){
         return ExperienceResponse.builder()
                 .id(experience.getId())
