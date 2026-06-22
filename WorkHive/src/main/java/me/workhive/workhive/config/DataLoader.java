@@ -2,11 +2,13 @@ package me.workhive.workhive.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
+import me.workhive.workhive.domain.entities.Language;
 import me.workhive.workhive.domain.entities.Requirement;
 import me.workhive.workhive.domain.entities.Skill;
 import me.workhive.workhive.domain.entities.User;
 import me.workhive.workhive.domain.entities.enums.Gender;
 import me.workhive.workhive.domain.entities.enums.Role;
+import me.workhive.workhive.repositories.LanguageRepository;
 import me.workhive.workhive.repositories.RequirementRepository;
 import me.workhive.workhive.repositories.SkillRepository;
 import me.workhive.workhive.repositories.UserRepository;
@@ -22,6 +24,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final SkillRepository skillRepository;
     private final RequirementRepository requirementRepository;
+    private final LanguageRepository languageRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -64,6 +67,17 @@ public class DataLoader implements CommandLineRunner {
                 "Azure",
                 "Linux"
         );
+        List<String> languages = List.of(
+                "Español",
+                "Inglés",
+                "Francés",
+                "Portugués",
+                "Italiano",
+                "Alemán",
+                "Mandarín",
+                "Japonés",
+                "Coreano"
+        );
 
         technologies.forEach(skillName -> {
             if (!skillRepository.existsByName(skillName)) {
@@ -80,6 +94,16 @@ public class DataLoader implements CommandLineRunner {
                 requirementRepository.save(
                         Requirement.builder()
                                 .name(requirementName)
+                                .build()
+                );
+            }
+        });
+
+        languages.forEach(languageName ->{
+            if (!languageRepository.existsByName(languageName)){
+                languageRepository.save(
+                        Language.builder()
+                                .name(languageName)
                                 .build()
                 );
             }
