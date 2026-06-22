@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.workhive.workhive.domain.entities.enums.LanguageLevel;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,11 +25,23 @@ public class Cv {
     @JoinColumn(name = "candidateProfileId", nullable = false)
     private CandidateProfile candidateProfile;
 
+    @Column(nullable = false)
+    private String professionalSummary;
+
+    @Column(nullable = false)
+    private String location;
+
+    @Column(nullable = false)
+    private String city;
+
     @OneToMany(mappedBy = "cv", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Experience> experiences;
 
     @OneToMany(mappedBy = "cv", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Education> education;
+
+    @OneToMany(mappedBy = "cv", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CvLanguage> cvLanguages;
 
     @ManyToMany
     @JoinTable(

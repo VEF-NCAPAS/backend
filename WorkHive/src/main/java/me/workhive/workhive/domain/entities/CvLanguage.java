@@ -5,27 +5,30 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.workhive.workhive.domain.entities.enums.LanguageLevel;
 
 import java.util.UUID;
 
 @Entity
+@Table(name = "cv_languages")
 @Data
-@Table(name = "education")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Education {
+public class CvLanguage {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
-    private String Institution;
+    @ManyToOne
+    @JoinColumn(name = "language_id")
+    private Language language;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String major;
+    private LanguageLevel level;
 
     @ManyToOne
-    @JoinColumn(name = "cv_id", nullable = false)
+    @JoinColumn(name = "cv_id")
     private Cv cv;
 }

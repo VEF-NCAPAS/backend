@@ -21,14 +21,19 @@ public class Experience {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
     private String company;
 
+    @Column(nullable = false)
     private String position;
 
+    @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
     private LocalDate hireDate;
 
+    @Column(nullable = false)
     private LocalDate endDate;
 
     @ManyToOne
