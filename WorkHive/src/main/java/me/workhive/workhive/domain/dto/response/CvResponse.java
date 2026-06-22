@@ -22,9 +22,17 @@ public class CvResponse {
 
     private String email;
 
+    private String professionalSummary;
+
+    private String location;
+
+    private String city;
+
     private List<ExperienceResponse> experiences;
 
     private List<EducationResponse> education;
+
+    private List<CvLanguageResponse> languages;
 
     private List<String> skills;
 }
