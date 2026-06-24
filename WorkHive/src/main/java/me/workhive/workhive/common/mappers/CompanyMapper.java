@@ -1,5 +1,6 @@
 package me.workhive.workhive.common.mappers;
 
+import me.workhive.workhive.domain.dto.request.CreateCompanyRequest;
 import me.workhive.workhive.domain.dto.response.CompanyResponse;
 import me.workhive.workhive.domain.entities.Company;
 import org.springframework.stereotype.Component;
@@ -22,5 +23,13 @@ public class CompanyMapper {
         return companies.stream()
                 .map(this::toDto)
                 .toList();
+    }
+
+    public Company toCompanyCreate(CreateCompanyRequest request) {
+        return Company.builder()
+                .name(request.getName())
+                .location(request.getLocation())
+                .sector(request.getSector())
+                .build();
     }
 }
