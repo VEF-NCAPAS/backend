@@ -11,6 +11,7 @@ import me.workhive.workhive.domain.entities.enums.Modality;
 import me.workhive.workhive.domain.entities.enums.VacancyStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,4 +29,5 @@ public class VacancyResponse {
     private BigDecimal salary;
     private Modality modality;
     private VacancyStatus status;
+    private LocalDate publicationDate;
 }
