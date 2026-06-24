@@ -1,6 +1,6 @@
 package me.workhive.workhive.domain.scoring;
 
-import me.workhive.workhive.domain.dto.request.CandidateSearchRequest;
+import me.workhive.workhive.domain.dto.request.CandidateScoreRequest;
 import me.workhive.workhive.domain.entities.Cv;
 import me.workhive.workhive.utils.StringUtils;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ public class LanguageScoringStrategy implements ScoringStrategy {
 
     private static final int MAX_SCORE = 15;
     @Override
-    public int calculate(Cv cv, CandidateSearchRequest request) {
+    public int calculate(Cv cv, CandidateScoreRequest request) {
 
         if (request.getLanguages() == null ||
                 request.getLanguages().isEmpty()) {
@@ -32,7 +32,7 @@ public class LanguageScoringStrategy implements ScoringStrategy {
     }
 
     @Override
-    public int getMaxScore(CandidateSearchRequest request) {
+    public int getMaxScore(CandidateScoreRequest request) {
 
         return request.getLanguages() == null ||
                 request.getLanguages().isEmpty()
