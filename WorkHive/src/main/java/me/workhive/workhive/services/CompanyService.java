@@ -28,4 +28,6 @@ public interface CompanyService {
     Map<String, Long> getGenderDiversityStats(UUID companyId);
 
     Map<String, Long> getGlobalGenderDiversityStats();
+
+    CompanyResponse getMyCompany(User user);
 }

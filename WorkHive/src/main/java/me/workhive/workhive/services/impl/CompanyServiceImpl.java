@@ -178,4 +178,14 @@ public class CompanyServiceImpl implements CompanyService {
         }
         return stats;
     }
+
+    @Override
+    public CompanyResponse getMyCompany(User user) {
+        RecruiterProfile recruiter = recruiterRepository.findByUser(user)
+                .orElseThrow(() -> new ResourceNotFoundException("Recruiter not found"));
+        if (recruiter.getCompany() == null) {
+            throw new ResourceNotFoundException("No company assigned to this recruiter");
+        }
+        return companyMapper.toDto(recruiter.getCompany());
+    }
 }

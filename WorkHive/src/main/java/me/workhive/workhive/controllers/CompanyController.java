@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/company")
+@RequestMapping({"/company", "/companies", "/api/company", "/api/companies"})
 @RequiredArgsConstructor
 public class CompanyController {
 
@@ -33,6 +33,16 @@ public class CompanyController {
                 "Companies retrieved successfully",
                 HttpStatus.OK,
                 companyService.getAllCompanies()
+        );
+    }
+
+    @GetMapping("/my-company")
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<GeneralResponse> getMyCompany(@AuthenticationPrincipal User user) {
+        return responseFactory.buildResponse(
+                "My company retrieved successfully",
+                HttpStatus.OK,
+                companyService.getMyCompany(user)
         );
     }
 
