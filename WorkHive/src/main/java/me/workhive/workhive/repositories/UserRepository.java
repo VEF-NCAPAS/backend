@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT u.gender, COUNT(u) " +
            "FROM User u " +
            "WHERE u.role = me.workhive.workhive.domain.entities.enums.Role.CANDIDATE " +
+           "OR u.role = me.workhive.workhive.domain.entities.enums.Role.RECRUITER " +
            "GROUP BY u.gender")
-    List<Object[]> countAllCandidatesByGender();
+    List<Object[]> countAllUsersByGender();
 }

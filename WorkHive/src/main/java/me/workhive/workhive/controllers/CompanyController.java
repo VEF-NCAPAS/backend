@@ -121,13 +121,4 @@ public class CompanyController {
         );
     }
 
-    @GetMapping("/diversity")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ADMINISTRATOR')")
-    public ResponseEntity<GeneralResponse> getGlobalDiversityStats() {
-        return responseFactory.buildResponse(
-                "Global gender diversity statistics retrieved successfully",
-                HttpStatus.OK,
-                companyService.getGlobalGenderDiversityStats()
-        );
-    }
 }

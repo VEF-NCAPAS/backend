@@ -156,28 +156,7 @@ public class CompanyServiceImpl implements CompanyService {
         return stats;
     }
 
-    @Override
-    public Map<String, Long> getGlobalGenderDiversityStats() {
-        List<Object[]> results = userRepository.countAllCandidatesByGender();
 
-        Map<String, Long> stats = new HashMap<>();
-        stats.put("M", 0L);
-        stats.put("F", 0L);
-        stats.put("O", 0L);
-
-        for (Object[] row : results) {
-            Gender gender = (Gender) row[0];
-            Long count = (Long) row[1];
-            if (gender != null) {
-                switch (gender) {
-                    case MALE -> stats.put("M", count);
-                    case FEMALE -> stats.put("F", count);
-                    case OTHER -> stats.put("O", count);
-                }
-            }
-        }
-        return stats;
-    }
 
     @Override
     public CompanyResponse getMyCompany(User user) {
