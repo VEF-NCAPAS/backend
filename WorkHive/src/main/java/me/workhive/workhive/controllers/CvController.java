@@ -42,7 +42,7 @@ public class CvController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole( 'RECRUITER', 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getCvById(
             @PathVariable UUID id
     ) {
