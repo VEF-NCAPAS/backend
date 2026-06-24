@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CreateVacancyRequest;
@@ -26,6 +27,10 @@ public class VacancyController {
     public final ResponseFactory responseFactory;
 
     @PostMapping
+    @Operation(
+            summary = "Crear vacante",
+            description = "Usuario reclutador vacante de empleo"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> createVacancy(@Valid @RequestBody CreateVacancyRequest request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -37,7 +42,11 @@ public class VacancyController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMIN')")
+    @Operation(
+            summary = "Obtener vacantes",
+            description = "Obtiene todas las vacantes y se puede filtrar"
+    )
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getAllVacancies(
             @RequestParam(defaultValue = "0")  int page,
             @RequestParam(defaultValue = "10") int size,
@@ -56,7 +65,11 @@ public class VacancyController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMIN')")
+    @Operation(
+            summary = "Obtener vacante por id",
+            description = "Obtiene vacantes segun su id"
+    )
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER', 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getVacancyById(
             @PathVariable UUID id
     ) {
@@ -69,6 +82,10 @@ public class VacancyController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Actualizar vacante",
+            description = "Permite actualizar vacantes segun su id"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> updateVacancy(
             @PathVariable UUID id,
@@ -83,6 +100,10 @@ public class VacancyController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar vacante",
+            description = "Elimina vacante segun id"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> deleteVacancy(
             @PathVariable UUID id,

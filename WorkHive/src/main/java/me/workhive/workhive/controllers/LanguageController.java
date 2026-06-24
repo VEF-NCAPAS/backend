@@ -3,7 +3,7 @@ package me.workhive.workhive.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.response.GeneralResponse;
-import me.workhive.workhive.services.RequirementService;
+import me.workhive.workhive.services.LanguageService;
 import me.workhive.workhive.utils.ResponseFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,42 +16,40 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/requirement")
+@RequestMapping("/languages")
 @RequiredArgsConstructor
-public class RequirementController {
+public class LanguageController {
 
-    private final RequirementService requirementService;
+    private final LanguageService languageService;
     private final ResponseFactory responseFactory;
 
     @GetMapping
     @Operation(
-            summary = "Obtener todos los requeremientos",
-            description = "Reclutador obtiene todos los requerimientos disponibles"
+            summary = "Obtener todos los idiomas",
+            description = "Usuario obtiene todos los idiomas disponibles"
     )
-    @PreAuthorize("hasRole('RECRUITER')")
-    public ResponseEntity<GeneralResponse> getAllRequirements() {
-
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER')")
+    public ResponseEntity<GeneralResponse> getAll() {
         return responseFactory.buildResponse(
-                "Requirements retrieved successfully",
+                "Languages retrieved successfully",
                 HttpStatus.OK,
-                requirementService.getAllRequirements()
+                languageService.getAll()
         );
     }
 
     @GetMapping("/{id}")
     @Operation(
-            summary = "Obtener requerimientos por id",
-            description = "Reclutador obtiene los requerimientos disponibles por id"
+            summary = "Obtener idiomas por id",
+            description = "Usuario obtiene los idiomas disponibles por id"
     )
-    @PreAuthorize("hasRole('RECRUITER')")
-    public ResponseEntity<GeneralResponse> getRequirementById(
+    @PreAuthorize("hasAnyRole('CANDIDATE', 'RECRUITER')")
+    public ResponseEntity<GeneralResponse> getById(
             @PathVariable UUID id
     ) {
-
         return responseFactory.buildResponse(
-                "Requirement retrieved successfully",
+                "Language retrieved successfully",
                 HttpStatus.OK,
-                requirementService.getRequirementById(id)
+                languageService.getById(id)
         );
     }
 }

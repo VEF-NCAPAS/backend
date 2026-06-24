@@ -18,7 +18,7 @@ public class ApplicationRecruiterResponse implements ApplicationResponse{
     private String candidateName;
     private String candidateEmail;
     private String vacancyTitle;
-   // private String cvFileName;
+    private CvResponse cv;
     private String coverLetter;
     private ApplicationStatus applicationStatus;
     private LocalDate applicationDate;

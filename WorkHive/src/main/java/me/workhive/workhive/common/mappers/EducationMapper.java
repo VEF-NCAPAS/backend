@@ -14,18 +14,6 @@ public class EducationMapper {
                 .build();
     }
 
-    /*public Education toEntityUpdate(UpdateEducationRequest request, UUID id) {
-        return Education.builder()
-                .id(id)
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .quantity(request.getQuantity())
-                .isAvailable(request.getIsAvailable())
-                .category(request.getCategory())
-                .build();
-    }*/
-
     public EducationResponse toDto(Education education){
         return EducationResponse.builder()
                 .id(education.getId())

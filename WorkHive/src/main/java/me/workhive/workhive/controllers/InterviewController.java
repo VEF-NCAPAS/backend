@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CreateInterviewRequest;
@@ -25,6 +26,10 @@ public class InterviewController {
     private final ResponseFactory responseFactory;
 
     @PostMapping
+    @Operation(
+                summary = "Crear entrevista",
+            description = "Usuario reclutador crea entrevistas"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> createInterview(
             @Valid @RequestBody CreateInterviewRequest request,
@@ -38,6 +43,10 @@ public class InterviewController {
         );
     }
 
+    @Operation(
+            summary = "Actualizar entrevista",
+            description = "Se pueden actualizar cualquier dato de la entrevista"
+    )
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> updateInterview(

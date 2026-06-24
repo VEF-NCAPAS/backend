@@ -5,25 +5,20 @@ import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.common.mappers.CvMapper;
 import me.workhive.workhive.common.mappers.EducationMapper;
 import me.workhive.workhive.common.mappers.ExperienceMapper;
-import me.workhive.workhive.domain.dto.request.CreateCvRequest;
-import me.workhive.workhive.domain.dto.request.SkillSelection;
-import me.workhive.workhive.domain.dto.request.UpdateCvRequest;
+import me.workhive.workhive.common.mappers.LanguageMapper;
+import me.workhive.workhive.domain.dto.request.*;
 import me.workhive.workhive.domain.dto.response.CvResponse;
 import me.workhive.workhive.domain.entities.*;
 import me.workhive.workhive.exceptions.BusinessRuleException;
 import me.workhive.workhive.exceptions.DeniedAccessException;
 import me.workhive.workhive.exceptions.ResourceNotFoundException;
-import me.workhive.workhive.repositories.CandidateRepository;
-import me.workhive.workhive.repositories.CvRepository;
-import me.workhive.workhive.repositories.SkillRepository;
-import me.workhive.workhive.repositories.UserRepository;
+import me.workhive.workhive.repositories.*;
 import me.workhive.workhive.services.CvService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +33,9 @@ public class CvServiceImpl implements CvService {
 
     private final ExperienceMapper experienceMapper;
     private final EducationMapper educationMapper;
-
+    private final LanguageMapper languageMapper;
     private final SkillRepository skillRepository;
+    private final LanguageRepository languageRepository;
 
     @Override
     @Transactional
@@ -66,12 +62,7 @@ public class CvServiceImpl implements CvService {
             );
         }
 
-        List<UUID> skillIds = request.getSkills()
-                .stream()
-                .map(SkillSelection::getId)
-                .toList();
-
-        List<Skill> skills = skillRepository.findAllById(skillIds);
+        validateExperiences(request.getExperiences());
 
         List<Experience> experiences = request.getExperiences()
                 .stream()
@@ -83,13 +74,45 @@ public class CvServiceImpl implements CvService {
                 .map(educationMapper::toEntityCreate)
                 .toList();
 
-        Cv cv = cvMapper.toCvCreate(request, candidateProfile, experiences, educations, skills);
+        List<CvLanguage> languages = request.getLanguages()
+                .stream()
+                .map(languageRequest -> {
+                    Language language = languageRepository.findById(languageRequest.getId()
+                    ).orElseThrow(() -> new ResourceNotFoundException("Language not found"));
+
+                    return languageMapper.toCvLanguage(languageRequest, language
+                    );
+                })
+                .toList();
+
+        List<UUID> skillIds = request.getSkills()
+                .stream()
+                .map(SkillSelection::getId)
+                .toList();
+
+        List<Skill> skills = skillRepository.findAllById(skillIds);
+
+        if (skills.size() != skillIds.size()) {
+            throw new ResourceNotFoundException(
+                    "One or more skills do not exist"
+            );
+        }
+
+        Cv cv = cvMapper.toCvCreate(
+                request,
+                candidateProfile,
+                experiences,
+                educations,
+                languages,
+                skills);
 
         educations.forEach(e -> e.setCv(cv));
         experiences.forEach(e -> e.setCv(cv));
+        languages.forEach(l-> l.setCv(cv));
 
         cv.setEducation(educations);
         cv.setExperiences(experiences);
+        cv.setCvLanguages(languages);
 
         Cv savedCv = cvRepository.save(cv);
 
@@ -126,37 +149,56 @@ public class CvServiceImpl implements CvService {
                 .equals(candidate.getId())) {
             throw new DeniedAccessException("You cannot edit another candidate's cv");
         }
-        List<UUID> skillIds = request.getSkills()
-                .stream()
-                .map(SkillSelection::getId)
-                .toList();
-
-        List<Skill> skills =
-                skillRepository.findAllById(skillIds);
 
         List<Experience> experiences =
                 request.getExperiences()
                         .stream()
                         .map(experienceMapper::toEntityCreate)
-                        .collect(Collectors.toList());
+                        .toList();
 
         List<Education> educations =
                 request.getEducation()
                         .stream()
                         .map(educationMapper::toEntityCreate)
-                        .collect(Collectors.toList());
+                        .toList();
+
+        List<CvLanguage> languages =
+                request.getLanguages()
+                        .stream()
+                        .map(languageRequest -> {
+                            Language language = languageRepository
+                                    .findById(languageRequest.getId())
+                                    .orElseThrow(() ->
+                                            new ResourceNotFoundException(
+                                                    "Language not found"
+                                            ));
+
+                            return languageMapper.toCvLanguage(
+                                    languageRequest,
+                                    language
+                            );
+                        })
+                        .toList();
+
+        List<UUID> skillIds = request.getSkills()
+                .stream()
+                .map(SkillSelection::getId)
+                .toList();
+
+
+        List<Skill> skills = skillRepository.findAllById(skillIds);
+
+        if (skills.size() != skillIds.size()) {
+            throw new ResourceNotFoundException(
+                    "One or more skills do not exist"
+            );
+        }
 
         educations.forEach(e -> e.setCv(existingCv));
         experiences.forEach(e -> e.setCv(existingCv));
+        languages.forEach(l -> l.setCv(existingCv));
 
-        existingCv.getExperiences().clear();
-        existingCv.getExperiences().addAll(experiences);
-
-        existingCv.getEducation().clear();
-        existingCv.getEducation().addAll(educations);
-
-        existingCv.setSkills(new ArrayList<>(skills));
-
+        cvMapper.toCvUpdate(existingCv, request, languages, educations, skills, experiences);
 
         Cv savedCv = cvRepository.save(existingCv);
 
@@ -164,6 +206,7 @@ public class CvServiceImpl implements CvService {
     }
 
     @Override
+    @Transactional
     public CvResponse deleteCv(UUID id,  User user){
         CvResponse existsCv = this.getCvById(id);
         CandidateProfile candidate = this.findCandidate(user);
@@ -188,5 +231,18 @@ public class CvServiceImpl implements CvService {
     public CandidateProfile findCandidate(User user){
         return candidateRepository.findByUser(user)
                 .orElseThrow(() -> new ResourceNotFoundException("Candidate not found"));
+    }
+
+    private void validateExperiences(List<CreateExperienceRequest> experiences) {
+
+        experiences.forEach(exp -> {
+
+            if (exp.getHireDate().isAfter(exp.getEndDate())) {
+
+                throw new BusinessRuleException(
+                        "Hire date cannot be after end date"
+                );
+            }
+        });
     }
 }

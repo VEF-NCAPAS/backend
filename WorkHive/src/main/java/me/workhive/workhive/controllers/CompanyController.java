@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CreateCompanyRequest;
@@ -28,6 +29,10 @@ public class CompanyController {
     private final ResponseFactory responseFactory;
 
     @GetMapping
+    @Operation(
+            summary = "Obtener todas las empresas",
+            description = "Obtiene todas las empresas sin autenticacion para poder seleccionarlas durante el registro"
+    )
     public ResponseEntity<GeneralResponse> getAllCompanies() {
         return responseFactory.buildResponse(
                 "Companies retrieved successfully",

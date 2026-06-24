@@ -26,4 +26,7 @@ public class CandidateProfile {
 
     @OneToMany(mappedBy = "candidate")
     private List<Application> applications;
+
+    @OneToOne(mappedBy = "candidateProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cv cv;
 }

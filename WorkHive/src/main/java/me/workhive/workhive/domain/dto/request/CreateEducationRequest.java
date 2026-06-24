@@ -1,18 +1,14 @@
 package me.workhive.workhive.domain.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class CreateEducationRequest {
+    @NotBlank(message = "institution is required")
     private String institution;
 
+    @NotBlank(message = "major is required")
     private String major;
 
-    //private String description;//quitar
 }

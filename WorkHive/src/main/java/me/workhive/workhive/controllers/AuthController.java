@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CandidateRegisterRequest;
@@ -20,6 +21,10 @@ public class AuthController {
     private final AuthService authService;
     private final ResponseFactory responseFactory;
 
+    @Operation(
+            summary = "Registrar candidato",
+            description = "Permite registrar un nuevo usuario con rol de candidato"
+    )
     @PostMapping("/register/candidate")
     public ResponseEntity<GeneralResponse> registerCandidate(@Valid @RequestBody CandidateRegisterRequest registerRequest){
         return responseFactory.buildResponse(
@@ -29,6 +34,10 @@ public class AuthController {
         );
     }
 
+    @Operation(
+            summary = "Registrar reclutador",
+            description = "Permite registrar un nuevo usuario con rol de reclutador"
+    )
     @PostMapping("/register/recruiter")
     public ResponseEntity<GeneralResponse> registerRecruiter(@Valid @RequestBody RecruiterRegisterRequest registerRequest){
         return responseFactory.buildResponse(
@@ -37,6 +46,10 @@ public class AuthController {
                 authService.registerRecruiter(registerRequest)
         );
     }
+    @Operation(
+            summary = "Iniciar sesion",
+            description = "Autentica un usuario utilizando correo y contraseña"
+    )
 
     @PostMapping("/login")
     public ResponseEntity<GeneralResponse> login(@Valid @RequestBody LoginRequest request) {
