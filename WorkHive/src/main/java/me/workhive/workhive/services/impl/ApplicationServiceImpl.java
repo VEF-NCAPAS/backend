@@ -175,27 +175,11 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Application> applications =
-                applicationRepository.findByVacancy_Id(vacancyId, pageable);
-
+        Page<Application> applications;
         if (skill != null && !skill.isBlank()) {
-
-            applications = new org.springframework.data.domain.PageImpl<>(
-                    applications.getContent()
-                            .stream()
-                            .filter(application ->
-                                    application.getCv()
-                                            .getSkills()
-                                            .stream()
-                                            .anyMatch(s ->
-                                                    s.getName()
-                                                            .equalsIgnoreCase(skill)
-                                            )
-                            )
-                            .toList(),
-                    pageable,
-                    applications.getTotalElements()
-            );
+            applications = applicationRepository.findByVacancy_IdAndCv_Skills_NameIgnoreCase(vacancyId, skill, pageable);
+        } else {
+            applications = applicationRepository.findByVacancy_Id(vacancyId, pageable);
         }
 
         Page<ApplicationRecruiterResponse> applicationPage = applicationMapper.toDtoApplicationRecruiterList(applications);

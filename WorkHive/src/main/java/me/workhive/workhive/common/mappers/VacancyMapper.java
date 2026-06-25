@@ -51,6 +51,7 @@ public class VacancyMapper {
                 .salary(vacancy.getSalary())
                 .modality(vacancy.getModality())
                 .status(vacancy.getStatus())
+                .publicationDate(vacancy.getPublicationDate())
                 .build();
     }
 
