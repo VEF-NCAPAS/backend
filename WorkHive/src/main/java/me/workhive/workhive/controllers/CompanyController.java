@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping({"/company", "/companies", "/api/company", "/api/companies"})
+@RequestMapping("/company")
 @RequiredArgsConstructor
 public class CompanyController {
 
@@ -52,7 +52,7 @@ public class CompanyController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole( 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> createCompany(@Valid @RequestBody CreateCompanyRequest request) {
         return responseFactory.buildResponse(
                 "Company created successfully",
@@ -71,7 +71,7 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ADMINISTRATOR', 'RECRUITER')")
+    @PreAuthorize("hasAnyRole( 'ADMINISTRATOR', 'RECRUITER')")
     public ResponseEntity<GeneralResponse> updateCompany(
             @PathVariable UUID id,
             @Valid @RequestBody UpdateCompanyRequest request,
@@ -85,7 +85,7 @@ public class CompanyController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole( 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> deleteCompany(@PathVariable UUID id) {
         return responseFactory.buildResponse(
                 "Company deleted successfully",
@@ -95,7 +95,7 @@ public class CompanyController {
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ADMINISTRATOR')")
+    @PreAuthorize("hasRole( 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getAllCompaniesAdmin(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -112,7 +112,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}/diversity")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ADMINISTRATOR', 'RECRUITER')")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'RECRUITER')")
     public ResponseEntity<GeneralResponse> getCompanyDiversityStats(@PathVariable UUID id) {
         return responseFactory.buildResponse(
                 "Company gender diversity statistics retrieved successfully",

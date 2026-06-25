@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping({"/user", "/api/user"})
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -50,7 +50,7 @@ public class UserController {
             summary = "Obtener estadísticas globales de diversidad de género",
             description = "Obtiene estadísticas de género acumuladas para Candidatos y Reclutadores"
     )
-    @PreAuthorize("hasAnyRole('ADMIN', 'ADMINISTRATOR')")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getGlobalDiversityStats() {
         return responseFactory.buildResponse(
                 "Global gender diversity statistics retrieved successfully",
