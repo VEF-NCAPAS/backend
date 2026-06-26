@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CreateVacancyRequest;
 import me.workhive.workhive.domain.dto.request.UpdateVacancyRequest;
 import me.workhive.workhive.domain.dto.response.GeneralResponse;
+import me.workhive.workhive.domain.dto.response.TopVacancyResponse;
 import me.workhive.workhive.domain.entities.User;
 import me.workhive.workhive.domain.entities.enums.Modality;
 import me.workhive.workhive.services.VacancyService;
@@ -17,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -115,5 +117,21 @@ public class VacancyController {
                 HttpStatus.OK,
                 vacancyService.deleteVacancy(id, user)
         );
+    }
+    @GetMapping("/top-vacancies")
+    @Operation(
+            summary = "Top 5 vacantes mas aplicadas",
+            description = "Obtiene el top 5 de las vacantes con mas postulaciones"
+    )
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<GeneralResponse> getTopVacancies(
+            @AuthenticationPrincipal User user){
+
+        return responseFactory.buildResponse(
+                "Top 5 retrieved successfully",
+                HttpStatus.OK,
+                vacancyService.getTopVacancies(user)
+        );
+
     }
 }

@@ -173,4 +173,19 @@ public class ApplicationController {
                 )
         );
     }
+
+    @GetMapping("/reports/selected-time")
+    @Operation(
+            summary = "Obtener reporte por tiempo de contratacion"
+    )
+    @PreAuthorize("hasRole('RECRUITER')")
+    public ResponseEntity<GeneralResponse> getSelectedTime(
+            @AuthenticationPrincipal User user
+    ) {
+        return responseFactory.buildResponse(
+                "Selected time report retrieved successfully",
+                HttpStatus.OK,
+                applicationService.getSelectedTime(user)
+        );
+    }
 }
