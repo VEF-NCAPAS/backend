@@ -19,7 +19,7 @@ public class CreateTechnicalTestRequest {
             regexp = "^(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})([/\\w .-]*)*/?$",
             message = "The link must be a valid URL starting with http:// or https://"
     )
-    private String link;
+    private String externalLink;
 
     @NotNull(message = "The deadline is required")
     @Future(message = "The deadline must be in the future")
