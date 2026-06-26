@@ -37,6 +37,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
+import static me.workhive.workhive.utils.DateUtils.*;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -167,7 +169,51 @@ public class UserServiceImpl implements UserService {
                 .last(adminUserPage.isLast())
                 .build();
     }
+    @Override
+    public UserGrowthReportResponse getUserGrowth(LocalDate from, LocalDate to, String groupBy) {
+        validateDateRange(from, to);
+        String normalizedGroupBy = groupBy == null ? "day" : groupBy.toLowerCase();
 
+        if (!normalizedGroupBy.equals("day") && !normalizedGroupBy.equals("month")) {
+            throw new BusinessRuleException("groupBy must be day or month");
+        }
+
+        List<User> users = userRepository.findByCreatedAtBetweenAndRoleIn(
+                startOfDay(from),
+                endOfDay(to),
+                List.of(Role.CANDIDATE, Role.RECRUITER)
+        );
+
+        Map<String, long[]> grouped = new LinkedHashMap<>();
+        users.forEach(user -> {
+            String period = normalizedGroupBy.equals("month")
+                    ? YearMonth.from(user.getCreatedAt()).toString()
+                    : user.getCreatedAt().toLocalDate().format(DateTimeFormatter.ISO_DATE);
+
+            long[] counts = grouped.computeIfAbsent(period, key -> new long[2]);
+            if (user.getRole() == Role.CANDIDATE) {
+                counts[0]++;
+            } else if (user.getRole() == Role.RECRUITER) {
+                counts[1]++;
+            }
+        });
+
+        List<UserGrowthItemResponse> growth = grouped.entrySet()
+                .stream()
+                .map(entry -> UserGrowthItemResponse.builder()
+                        .period(entry.getKey())
+                        .candidates(entry.getValue()[0])
+                        .recruiters(entry.getValue()[1])
+                        .build())
+                .toList();
+
+        return UserGrowthReportResponse.builder()
+                .from(from)
+                .to(to)
+                .groupBy(normalizedGroupBy)
+                .growth(growth)
+                .build();
+    }
 
     public User findUserById(UUID id){
         return userRepository.findById(id)

@@ -117,6 +117,24 @@ public class UserController {
         return ResponseEntity.ok("Password updated successfully");
     }
 
+    @GetMapping("/reports/users-growth")
+    @Operation(
+            summary = "Obtener el reporte de crecimiento de usuario",
+            description = "Obtiene los reportes de crecimiento de usuario"
+    )
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<GeneralResponse> getUserGrowth(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(defaultValue = "day") String groupBy
+    ) {
+        return responseFactory.buildResponse(
+                "User growth report retrieved successfully",
+                HttpStatus.OK,
+                userService.getUserGrowth(from, to, groupBy)
+        );
+    }
+
     @GetMapping("/diversity")
     @Operation(
             summary = "Obtener estadísticas globales de diversidad de género",

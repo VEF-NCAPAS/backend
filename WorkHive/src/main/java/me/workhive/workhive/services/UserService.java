@@ -18,4 +18,5 @@ public interface UserService {
     UserAdminResponse getUserById(UUID id);
     UserAdminResponse deleteUser(UUID id);
     PageableResponse<UserAdminResponse> getUsers(int page, int size, String sortBy, String sortOrder);
+    UserGrowthReportResponse getUserGrowth(LocalDate from, LocalDate to, String groupBy);
 }
