@@ -55,7 +55,7 @@ public class Vacancy {
     @Column(nullable = false)
     private LocalDate publicationDate;
 
-    @OneToMany(mappedBy = "vacancy")
+    @OneToMany(mappedBy = "vacancy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Application> applications;
 
     @Column(nullable = false, updatable = false)
