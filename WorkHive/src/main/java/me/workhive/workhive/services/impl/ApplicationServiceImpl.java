@@ -31,6 +31,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
+import static me.workhive.workhive.utils.DateUtils.*;
+
 @Service
 @RequiredArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
@@ -83,6 +85,15 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationMapper.toApplicationCandidateDto(saved);
     }
 
+    @Override
+    public ApplicationReportResponse getApplicationVolume(LocalDate from, LocalDate to) {
+        validateDateRange(from, to);
+        return ApplicationReportResponse.builder()
+                .from(from)
+                .to(to)
+                .totalApplications(applicationRepository.countByCreatedAtBetween(startOfDay(from), endOfDay(to)))
+                .build();
+    }
 
     @Override
     public ApplicationResponse getApplicationById(UUID id, User user) {

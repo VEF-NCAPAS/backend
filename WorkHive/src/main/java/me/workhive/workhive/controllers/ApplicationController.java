@@ -9,6 +9,7 @@ import me.workhive.workhive.domain.dto.response.GeneralResponse;
 import me.workhive.workhive.domain.entities.User;
 import me.workhive.workhive.services.ApplicationService;
 import me.workhive.workhive.utils.ResponseFactory;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -113,6 +114,23 @@ public class ApplicationController {
                         size,
                         user
                 )
+        );
+    }
+
+    @GetMapping("/reports")
+    @Operation(
+            summary = "Obtener el reporte de volumen de aplicaciones",
+            description = "Obtiene el reporte de volumen de aplicacion"
+    )
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<GeneralResponse> getApplicationVolume(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+    ) {
+        return responseFactory.buildResponse(
+                "Application volume report retrieved successfully",
+                HttpStatus.OK,
+                applicationService.getApplicationVolume(from, to)
         );
     }
 
