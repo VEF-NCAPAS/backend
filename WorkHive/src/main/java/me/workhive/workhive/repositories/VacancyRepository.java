@@ -1,5 +1,6 @@
 package me.workhive.workhive.repositories;
 
+import me.workhive.workhive.domain.dto.response.TopVacancyResponse;
 import me.workhive.workhive.domain.entities.Company;
 import me.workhive.workhive.domain.entities.Vacancy;
 import me.workhive.workhive.domain.entities.enums.Modality;
@@ -7,7 +8,10 @@ import me.workhive.workhive.domain.entities.enums.VacancyStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
@@ -34,6 +38,23 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
             Company company,
             String title,
             Modality modality,
+            Pageable pageable
+    );
+
+    @Query("""
+    SELECT new me.workhive.workhive.domain.dto.response.TopVacancyResponse(
+        v.id,
+        v.title,
+        COUNT(a.id)
+    )
+    FROM Vacancy v
+    LEFT JOIN v.applications a
+    WHERE v.company.id = :companyId
+    GROUP BY v.id, v.title
+    ORDER BY COUNT(a.id) DESC
+""")
+    List<TopVacancyResponse> findMostAppliedByCompany(
+            @Param("companyId") UUID companyId,
             Pageable pageable
     );
 }
