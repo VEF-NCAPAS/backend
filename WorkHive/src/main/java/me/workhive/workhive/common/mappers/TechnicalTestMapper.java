@@ -14,7 +14,7 @@ public class TechnicalTestMapper {
     public TechnicalTest toTechnicalTestCreate(CreateTechnicalTestRequest request, Application application){
         return TechnicalTest.builder()
                 .application(application)
-                .link(request.getLink())
+                .link(request.getExternalLink())
                 .deadline(request.getDeadline())
                 .build();
     }

@@ -54,6 +54,7 @@ public class ApplicationMapper {
                 .cv(cvMapper.toCvDto(application.getCv()))
                 .applicationStatus(application.getApplicationStatus())
                 .applicationDate(application.getApplicationDate())
+                .selectedDate(application.getSelectedDate())
                 .technicalTest(application.getTechnicalTest() != null ?
                         technicalTestMapper.toTechnicalTestDto(application.getTechnicalTest()) : null)
                 .interview(application.getInterview() != null ?
