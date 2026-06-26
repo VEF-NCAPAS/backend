@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.common.mappers.ApplicationMapper;
 import me.workhive.workhive.domain.dto.request.CreateApplicationRequest;
 import me.workhive.workhive.domain.dto.request.UpdateApplicationStatusRequest;
-import me.workhive.workhive.domain.dto.response.ApplicationCandidateResponse;
-import me.workhive.workhive.domain.dto.response.ApplicationRecruiterResponse;
-import me.workhive.workhive.domain.dto.response.ApplicationResponse;
-import me.workhive.workhive.domain.dto.response.PageableResponse;
+import me.workhive.workhive.domain.dto.response.*;
 import me.workhive.workhive.domain.entities.*;
 import me.workhive.workhive.domain.entities.enums.ApplicationStatus;
 import me.workhive.workhive.domain.entities.enums.Role;
@@ -27,7 +24,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -329,6 +330,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         application.setApplicationStatus(request.getStatus());
+        if (request.getStatus() == ApplicationStatus.SELECTED) {
+            application.setSelectedDate(LocalDateTime.now());
+        }
         Application saved = applicationRepository.save(application);
 
         String html;
@@ -361,6 +365,33 @@ public class ApplicationServiceImpl implements ApplicationService {
         }
 
         return applicationMapper.toApplicationRecruiterDto(saved);
+    }
+    @Override
+    public List<SelectedTimeResponse> getSelectedTime(User user) {
+
+        RecruiterProfile recruiter = findRecruiter(user);
+
+        UUID companyId = recruiter.getCompany().getId();
+
+        List<Application> applications =
+                applicationRepository.findSelectedApplicationsByCompany(companyId);
+
+        return applications.stream()
+                .filter(application -> application.getSelectedDate() != null)
+                .map(application -> {
+                    double hours = Duration.between(
+                            application.getCreatedAt(),
+                            application.getSelectedDate()
+                    ).toMinutes() / 60.0;
+
+                    hours = Math.round(hours * 100.0) / 100.0;
+
+                    return SelectedTimeResponse.builder()
+                            .title(application.getVacancy().getTitle())
+                            .hours(hours)
+                            .build();
+                })
+                .toList();
     }
     private Application findApplication(UUID id) {
         return applicationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Application not found"));

@@ -4,8 +4,10 @@ import me.workhive.workhive.domain.dto.request.CreateApplicationRequest;
 import me.workhive.workhive.domain.dto.request.UpdateApplicationStatusRequest;
 import me.workhive.workhive.domain.dto.response.ApplicationResponse;
 import me.workhive.workhive.domain.dto.response.PageableResponse;
+import me.workhive.workhive.domain.dto.response.SelectedTimeResponse;
 import me.workhive.workhive.domain.entities.User;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ApplicationService {
@@ -29,4 +31,5 @@ public interface ApplicationService {
     ApplicationResponse withdrawApplication(UUID id, User user);
     ApplicationResponse reviewApplication(UUID id, User user);
     ApplicationResponse updateApplicationStatus(UUID id, UpdateApplicationStatusRequest request, User user);
+    List<SelectedTimeResponse> getSelectedTime(User user);
 }

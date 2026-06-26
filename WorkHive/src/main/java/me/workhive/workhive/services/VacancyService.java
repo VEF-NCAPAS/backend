@@ -3,10 +3,12 @@ package me.workhive.workhive.services;
 import me.workhive.workhive.domain.dto.request.CreateVacancyRequest;
 import me.workhive.workhive.domain.dto.request.UpdateVacancyRequest;
 import me.workhive.workhive.domain.dto.response.PageableResponse;
+import me.workhive.workhive.domain.dto.response.TopVacancyResponse;
 import me.workhive.workhive.domain.dto.response.VacancyResponse;
 import me.workhive.workhive.domain.entities.User;
 import me.workhive.workhive.domain.entities.enums.Modality;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface VacancyService {
@@ -16,4 +18,5 @@ public interface VacancyService {
     VacancyResponse getVacancyById(UUID id);
     VacancyResponse updateVacancy(UUID  id , UpdateVacancyRequest request, User user);
     VacancyResponse deleteVacancy(UUID id,  User user);
+    List<TopVacancyResponse> getTopVacancies(User user);
 }

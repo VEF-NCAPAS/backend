@@ -7,6 +7,7 @@ import me.workhive.workhive.domain.dto.request.CreateVacancyRequest;
 import me.workhive.workhive.domain.dto.request.RequirementSelection;
 import me.workhive.workhive.domain.dto.request.UpdateVacancyRequest;
 import me.workhive.workhive.domain.dto.response.PageableResponse;
+import me.workhive.workhive.domain.dto.response.TopVacancyResponse;
 import me.workhive.workhive.domain.dto.response.VacancyResponse;
 import me.workhive.workhive.domain.entities.RecruiterProfile;
 import me.workhive.workhive.domain.entities.Requirement;
@@ -193,6 +194,17 @@ public class VacancyServiceImpl implements VacancyService {
         VacancyResponse response = vacancyMapper.toVacancyDto(vacancy);
         vacancyRepository.delete(vacancy);
         return response;
+    }
+    @Override
+    public List<TopVacancyResponse> getTopVacancies(User user){
+
+        RecruiterProfile recruiter = recruiterRepository.findByUser(user)
+                .orElseThrow(() -> new ResourceNotFoundException("Recruiter not found"));
+
+        return vacancyRepository.findMostAppliedByCompany(
+                recruiter.getCompany().getId(),
+                PageRequest.of(0,5)
+        );
     }
 
     public Vacancy findVacancyById(UUID id){
