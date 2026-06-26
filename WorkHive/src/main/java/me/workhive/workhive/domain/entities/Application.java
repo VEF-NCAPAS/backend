@@ -10,6 +10,7 @@ import me.workhive.workhive.domain.entities.enums.ApplicationStatus;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -38,7 +39,7 @@ public class Application {
     @Column
     private String coverLetter;
 
-    @OneToOne(mappedBy = "application",  cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "application", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private TechnicalTest technicalTest;
 
     @Enumerated(EnumType.STRING)
@@ -48,8 +49,14 @@ public class Application {
     @Column(nullable = false)
     private LocalDate applicationDate;
 
-    @OneToOne(mappedBy = "application",  cascade = CascadeType.ALL)
+    @Column(nullable = true)
+    private LocalDateTime selectedDate;
+
+    @OneToOne(mappedBy = "application", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Interview interview;
+
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PrivateComment> comments;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
