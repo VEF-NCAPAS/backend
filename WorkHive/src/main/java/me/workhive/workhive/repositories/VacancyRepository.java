@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
@@ -57,4 +58,8 @@ public interface VacancyRepository extends JpaRepository<Vacancy, UUID> {
             @Param("companyId") UUID companyId,
             Pageable pageable
     );
+
+    long countByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
+
+    long countByCreatedAtBetweenAndStatus(LocalDateTime startDate, LocalDateTime endDate, VacancyStatus status);
 }

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface ApplicationRepository extends JpaRepository<Application, UUID> {
@@ -30,4 +31,6 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
       AND a.vacancy.company.id = :companyId
 """)
     List<Application> findSelectedApplicationsByCompany(UUID companyId);
+
+    long countByCreatedAtBetween(LocalDateTime from, LocalDateTime to);
 }
