@@ -37,7 +37,6 @@ public class VacancyServiceImpl implements VacancyService {
     private final RequirementRepository requirementRepository;
     private final RecruiterRepository recruiterRepository;
     public final VacancyMapper vacancyMapper;
-
     @Override
     @Transactional
     public VacancyResponse createVacancy(CreateVacancyRequest request, User user) {
