@@ -8,6 +8,7 @@ import me.workhive.workhive.domain.dto.request.RequirementSelection;
 import me.workhive.workhive.domain.dto.request.UpdateVacancyRequest;
 import me.workhive.workhive.domain.dto.response.PageableResponse;
 import me.workhive.workhive.domain.dto.response.TopVacancyResponse;
+import me.workhive.workhive.domain.dto.response.VacancyReportResponse;
 import me.workhive.workhive.domain.dto.response.VacancyResponse;
 import me.workhive.workhive.domain.entities.RecruiterProfile;
 import me.workhive.workhive.domain.entities.Requirement;
@@ -28,8 +29,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import static me.workhive.workhive.utils.DateUtils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -204,6 +209,21 @@ public class VacancyServiceImpl implements VacancyService {
                 recruiter.getCompany().getId(),
                 PageRequest.of(0,5)
         );
+    }
+
+    @Override
+    public VacancyReportResponse getVacancyVolume(LocalDate startDate, LocalDate endDate) {
+        validateDateRange(startDate, endDate);
+        LocalDateTime fromDateTime = startOfDay(startDate);
+        LocalDateTime toDateTime = endOfDay(endDate);
+
+        return VacancyReportResponse.builder()
+                .startDate(startDate)
+                .endDate(endDate)
+                .totalVacancies(vacancyRepository.countByCreatedAtBetween(fromDateTime, toDateTime))
+                .activeVacancies(vacancyRepository.countByCreatedAtBetweenAndStatus(fromDateTime, toDateTime, VacancyStatus.OPEN))
+                .closedVacancies(vacancyRepository.countByCreatedAtBetweenAndStatus(fromDateTime, toDateTime, VacancyStatus.CLOSE))
+                .build();
     }
 
     public Vacancy findVacancyById(UUID id){

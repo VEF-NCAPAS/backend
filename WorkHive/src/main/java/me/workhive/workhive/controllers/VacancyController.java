@@ -85,6 +85,23 @@ public class VacancyController {
         );
     }
 
+    @GetMapping("/reports")
+    @Operation(
+            summary = "Obtener volumen de vacantes",
+            description = "Obtiene el reporte del volumen de vacante"
+    )
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<GeneralResponse> getVacancyVolume(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+    ) {
+        return responseFactory.buildResponse(
+                "Vacancy volume report retrieved successfully",
+                HttpStatus.OK,
+                vacancyService.getVacancyVolume(from, to)
+        );
+    }
+
     @PutMapping("/{id}")
     @Operation(
             summary = "Actualizar vacante",
