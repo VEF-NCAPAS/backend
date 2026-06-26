@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface ApplicationRepository extends JpaRepository<Application, UUID> {
@@ -16,4 +17,6 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
     Page<Application> findByVacancy_CompanyId(UUID vacancyCompanyId, Pageable pageable);
     boolean existsByCandidateAndVacancy(CandidateProfile candidate, Vacancy vacancy);
     Page<Application> findByVacancy_Id(UUID vacancyId, Pageable pageable);
+
+    long countByCreatedAtBetween(LocalDateTime from, LocalDateTime to);
 }
