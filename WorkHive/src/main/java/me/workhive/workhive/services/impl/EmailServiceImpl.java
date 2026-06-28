@@ -1,34 +1,48 @@
 package me.workhive.workhive.services.impl;
 
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import me.workhive.workhive.domain.dto.request.ResendEmailRequest;
 import me.workhive.workhive.services.EmailService;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender mailSender;
+    private final RestClient resendRestClient;
+
+    @Value("${resend.from}")
+    private String from;
 
     @Override
     public void sendHtmlEmail(String to, String subject, String html) {
 
+        ResendEmailRequest request = new ResendEmailRequest(
+                from,
+                List.of(to),
+                subject,
+                html
+        );
+
         try {
 
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(html, true);
-
-            mailSender.send(message);
+            resendRestClient
+                    .post()
+                    .uri("/emails")
+                    .body(request)
+                    .retrieve()
+                    .toBodilessEntity();
 
         } catch (Exception e) {
+
             throw new RuntimeException("Error sending email", e);
+
         }
+
     }
+
 }
