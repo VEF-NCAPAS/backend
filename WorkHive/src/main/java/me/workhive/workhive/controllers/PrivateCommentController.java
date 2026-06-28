@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CreatePrivateCommentRequest;
@@ -25,6 +26,10 @@ public class PrivateCommentController {
     private final ResponseFactory responseFactory;
 
     @PostMapping
+    @Operation(
+            summary = "Agregar comentario privado",
+            description = "Agrega comentario privado por etapas"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> createComment(
             @Valid @RequestBody CreatePrivateCommentRequest request,
@@ -38,6 +43,10 @@ public class PrivateCommentController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Obtner comentario privado",
+            description = "Obtiene comentario privado por etapas"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> getCommentById(
             @PathVariable UUID id,
@@ -51,6 +60,10 @@ public class PrivateCommentController {
     }
 
     @GetMapping("/application/{applicationId}")
+    @Operation(
+            summary = "Obtener comentario privado por aplicacion",
+            description = "Obtiene comentario privado por etapas y por aplicacion"
+    )
     public ResponseEntity<GeneralResponse> getCommentsByApplication(
             @PathVariable UUID applicationId,
             @RequestParam(defaultValue = "0") int page,
@@ -74,6 +87,10 @@ public class PrivateCommentController {
     }
 
     @PatchMapping("/{id}")
+    @Operation(
+            summary = "Actualizar comentario privado",
+            description = "Actualiza comentario privado por etapas"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> updateComment(
             @PathVariable UUID id,
@@ -92,6 +109,10 @@ public class PrivateCommentController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar comentario privado",
+            description = "Elimina comentario privado por etapas"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> deleteComment(
             @PathVariable UUID id,

@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.response.CandidateScoreResponse;
 import me.workhive.workhive.domain.dto.response.PageableResponse;
@@ -21,6 +22,10 @@ public class CandidateController {
     private final CandidateService candidateService;
 
     @GetMapping("/vacancy/{vacancyId}")
+    @Operation(
+            summary = "Obtener candidatos por id de vacante",
+            description = "Permite obtener candidatos por id de vacante y permite el filtrado por score"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<PageableResponse<CandidateScoreResponse>> getAllCandidatesByVacancy(
             @PathVariable UUID vacancyId,

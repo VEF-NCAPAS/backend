@@ -1,5 +1,6 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.response.GeneralResponse;
 import me.workhive.workhive.domain.entities.User;
@@ -21,6 +22,10 @@ public class SubscriptionController {
 
 
     @PreAuthorize("hasRole('RECRUITER')")
+    @Operation(
+            summary = "Crea sesion de pago",
+            description = "Crea la sesion de pago para el plan premium"
+    )
     @PostMapping("/checkout")
     public ResponseEntity<GeneralResponse> checkout(@AuthenticationPrincipal User user) {
 
