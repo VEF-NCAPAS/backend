@@ -1,5 +1,6 @@
 package me.workhive.workhive.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -10,14 +11,17 @@ import java.util.List;
 
 @Configuration
 public class CorsConfig {
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
+
         configuration.setAllowedOrigins(
-                List.of("http://localhost:3000")
+                List.of(frontendUrl)
         );
 
         configuration.setAllowedMethods(
