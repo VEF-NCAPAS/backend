@@ -66,7 +66,9 @@ public class AuthMapper {
 
     public RegisterResponse toRegisterDto(User user) {
         return RegisterResponse.builder()
+                .name(user.getName())
                 .email(user.getEmail())
+                .gender(user.getGender())
                 .role(user.getRole())
                 .build();
     }
