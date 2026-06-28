@@ -1,6 +1,7 @@
 package me.workhive.workhive.domain.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,8 @@ public class Cv {
     @JoinColumn(name = "candidateProfileId", nullable = false)
     private CandidateProfile candidateProfile;
 
+    @Lob
+    @Size(max = 5000)
     @Column(nullable = false)
     private String professionalSummary;
 

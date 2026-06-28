@@ -1,6 +1,7 @@
 package me.workhive.workhive.domain.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +28,8 @@ public class Experience {
     @Column(nullable = false)
     private String position;
 
+    @Lob
+    @Size(max = 3000)
     @Column(nullable = false)
     private String description;
 
