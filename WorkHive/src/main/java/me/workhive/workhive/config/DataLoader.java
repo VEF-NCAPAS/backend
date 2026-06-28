@@ -1,6 +1,5 @@
 package me.workhive.workhive.config;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.entities.Language;
 import me.workhive.workhive.domain.entities.Requirement;
@@ -12,6 +11,7 @@ import me.workhive.workhive.repositories.LanguageRepository;
 import me.workhive.workhive.repositories.RequirementRepository;
 import me.workhive.workhive.repositories.SkillRepository;
 import me.workhive.workhive.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -28,9 +28,10 @@ public class DataLoader implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    Dotenv dotenv = Dotenv.load();
-    String adminEmail = dotenv.get("MAIL_USERNAME");
-    String adminPassword = dotenv.get("ADMIN_PASSWORD");
+    @Value("{app.mail-username}")
+    private String adminEmail;
+    @Value("${app.admin-password}")
+    private String adminPassword;
 
     @Override
     public void run(String... args){
