@@ -90,6 +90,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponse getMyProfile(User currentUser) {
+        return userMapper.toDto(currentUser);
+    }
+
+    @Override
     public UserResponse updateMyProfile(User currentUser, UpdateUserRequest request) {
 
         if (!currentUser.getEmail().equals(request.getEmail())

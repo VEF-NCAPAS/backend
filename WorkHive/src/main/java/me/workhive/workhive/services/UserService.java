@@ -13,6 +13,7 @@ public interface UserService {
     void changePassword(User user, ChangePasswordRequest request);
 
     Map<String, Long> getGlobalGenderDiversityStats();
+    UserResponse getMyProfile(User currentUser);
     UserResponse updateMyProfile(User currentUser, UpdateUserRequest request);
     UserResponse adminUpdateUser(UUID userId, UpdateUserRequest request);
     UserAdminResponse getUserById(UUID id);

@@ -147,6 +147,25 @@ public class UserController {
         );
     }
 
+    @GetMapping("/me")
+    @Operation(
+            summary = "Obtener mi perfil",
+            description = "Devuelve la información del usuario autenticado"
+    )
+    @PreAuthorize("hasRole('CANDIDATE')")
+    public ResponseEntity<GeneralResponse> getMyProfile(
+            Authentication authentication
+    ) {
+
+        User currentUser = (User) authentication.getPrincipal();
+
+        return responseFactory.buildResponse(
+                "Profile retrieved successfully",
+                HttpStatus.OK,
+                userService.getMyProfile(currentUser)
+        );
+    }
+
     @PutMapping("/me")
     @Operation(
             summary = "actualizar perfil",
