@@ -28,11 +28,11 @@ public class DataLoader implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    @Value("{app.mail-username}")
+    @Value("${app.mail-username}")
     private String adminEmail;
+
     @Value("${app.admin-password}")
     private String adminPassword;
-
     @Override
     public void run(String... args){
         if (!userRepository.existsByEmail(adminEmail)) {
