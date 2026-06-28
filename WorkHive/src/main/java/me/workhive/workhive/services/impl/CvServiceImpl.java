@@ -124,10 +124,10 @@ public class CvServiceImpl implements CvService {
 
         CandidateProfile candidate = candidateRepository
                 .findByUser(user)
-                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Candidate not found"));
         Cv cv = cvRepository
                 .findByCandidateProfile(candidate)
-                .orElseThrow(() -> new RuntimeException("CV not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("CV not found"));
         return cvMapper.toCvDto(cv);
     }
     @Override
