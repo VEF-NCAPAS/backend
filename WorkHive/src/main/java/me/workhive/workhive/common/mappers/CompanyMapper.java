@@ -16,6 +16,7 @@ public class CompanyMapper {
                 .companyName(company.getName())
                 .location(company.getLocation())
                 .sector(company.getSector())
+                .subscriptionPlan(company.getSubscriptionPlan())
                 .build();
     }
 

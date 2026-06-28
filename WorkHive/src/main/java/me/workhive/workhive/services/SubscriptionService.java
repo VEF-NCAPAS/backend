@@ -6,4 +6,5 @@ import me.workhive.workhive.domain.entities.User;
 public interface SubscriptionService {
 
     StripeResponse createCheckoutSession(User user);
+    void handleWebhook(String payload, String signature);
 }

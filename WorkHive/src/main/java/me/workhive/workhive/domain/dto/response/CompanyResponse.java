@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.workhive.workhive.domain.entities.enums.SubscriptionPlan;
 
 import java.util.UUID;
 
@@ -17,4 +18,5 @@ public class CompanyResponse {
     private String companyName;
     private String location;
     private String sector;
+    private SubscriptionPlan subscriptionPlan;
 }
