@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import me.workhive.workhive.domain.entities.enums.SubscriptionPlan;
 
 import java.util.List;
 import java.util.UUID;
@@ -29,6 +30,15 @@ public class Company {
 
     @Column
     private String sector;
+
+    @Builder.Default
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SubscriptionPlan subscriptionPlan = SubscriptionPlan.FREE;
+
+    @Column(name = "stripe_payment_intent_id")
+    private String stripePaymentIntentId;
+
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecruiterProfile> recruiters;

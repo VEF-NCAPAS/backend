@@ -6,6 +6,7 @@ import me.workhive.workhive.domain.dto.request.CandidateScoreRequest;
 import me.workhive.workhive.domain.dto.response.CandidateScoreResponse;
 import me.workhive.workhive.domain.dto.response.PageableResponse;
 import me.workhive.workhive.domain.entities.*;
+import me.workhive.workhive.domain.entities.enums.SubscriptionPlan;
 import me.workhive.workhive.domain.scoring.ScoringStrategy;
 import me.workhive.workhive.exceptions.DeniedAccessException;
 import me.workhive.workhive.exceptions.ResourceNotFoundException;
@@ -47,6 +48,12 @@ public class CandidateServiceImpl implements CandidateService {
     ) {
         RecruiterProfile recruiterProfile = recruiterRepository.findByUser(user)
                 .orElseThrow(() -> new ResourceNotFoundException("Recruiter not found"));
+
+        if (recruiterProfile.getCompany().getSubscriptionPlan() != SubscriptionPlan.PREMIUM) {
+            throw new DeniedAccessException(
+                    "Your company must have a Premium subscription to use candidate scoring."
+            );
+        }
 
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new ResourceNotFoundException("Vacancy not found"));
