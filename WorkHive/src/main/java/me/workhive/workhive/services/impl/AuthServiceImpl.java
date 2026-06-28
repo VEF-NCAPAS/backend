@@ -67,6 +67,10 @@ public class AuthServiceImpl implements AuthService {
                     .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
 
         } else {
+
+            if (companyRepository.existsByNameIgnoreCase(request.getCompany().getCompanyName())) {
+                throw new DuplicatedResourceException("Company already exists");
+            }
             company = companyRepository.save(authMapper.toCompanyCreate(request.getCompany()));
         }
 

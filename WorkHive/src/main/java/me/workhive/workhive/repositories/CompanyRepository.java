@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, UUID> {
     Optional<Company> findByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 
     @Query("SELECT u.gender, COUNT(DISTINCT c.id) " +
            "FROM Company co " +

@@ -59,7 +59,6 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
-    //ver si se pueden unificar con los otros 401 y 403
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiErrorResponse> handleAuthenticationException(Exception e) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, "Full authentication is required to access this resource");

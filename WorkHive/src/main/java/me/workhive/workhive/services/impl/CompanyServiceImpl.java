@@ -54,8 +54,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Transactional
     public CompanyResponse createCompany(CreateCompanyRequest request) {
-        if (companyRepository.findByName(request.getName()).isPresent()) {
-            throw new DuplicatedResourceException("Company name already exists");
+        if (companyRepository.existsByNameIgnoreCase(request.getName())) {
+            throw new DuplicatedResourceException("Company already exists");
         }
         Company company = companyMapper.toCompanyCreate(request);
         Company saved = companyRepository.save(company);

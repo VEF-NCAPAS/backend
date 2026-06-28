@@ -1,0 +1,34 @@
+package me.workhive.workhive.controllers;
+
+import lombok.RequiredArgsConstructor;
+import me.workhive.workhive.domain.dto.response.GeneralResponse;
+import me.workhive.workhive.domain.entities.User;
+import me.workhive.workhive.services.SubscriptionService;
+import me.workhive.workhive.utils.ResponseFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/subscriptions")
+@RequiredArgsConstructor
+public class SubscriptionController {
+
+    private final SubscriptionService subscriptionService;
+    private final ResponseFactory responseFactory;
+
+
+    @PreAuthorize("hasRole('RECRUITER')")
+    @PostMapping("/checkout")
+    public ResponseEntity<GeneralResponse> checkout(@AuthenticationPrincipal User user) {
+
+        return responseFactory.buildResponse(
+                "Pay session created successfully",
+                HttpStatus.CREATED,
+                subscriptionService.createCheckoutSession(user)
+        );
+
+    }
+}
