@@ -146,7 +146,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
             companyRepository.save(company);
 
-            System.out.println("Empresa actualizada a PREMIUM");
         }
 
     }

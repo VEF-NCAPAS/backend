@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/languages")
+@RequestMapping("/api/languages")
 @RequiredArgsConstructor
 public class LanguageController {
 

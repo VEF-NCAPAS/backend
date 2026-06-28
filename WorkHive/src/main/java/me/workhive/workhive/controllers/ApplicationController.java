@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/application")
+@RequestMapping("/api/application")
 @RequiredArgsConstructor
 public class ApplicationController {
 

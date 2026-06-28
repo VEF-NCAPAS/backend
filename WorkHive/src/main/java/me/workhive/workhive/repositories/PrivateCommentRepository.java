@@ -23,14 +23,4 @@ public interface PrivateCommentRepository extends JpaRepository<PrivateComment, 
             Pageable pageable
     );
 
-    Page<PrivateComment> findByRecruiter(
-            RecruiterProfile recruiter,
-            Pageable pageable
-    );
-
-    Page<PrivateComment> findByApplicationOrderByCreatedAtDesc(
-            Application application,
-            Pageable pageable
-    );
-
 }

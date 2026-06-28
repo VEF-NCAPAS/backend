@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/privateComment")
+@RequestMapping("/api/privateComment")
 @RequiredArgsConstructor
 public class PrivateCommentController {
     private final PrivateCommentService privateCommentService;

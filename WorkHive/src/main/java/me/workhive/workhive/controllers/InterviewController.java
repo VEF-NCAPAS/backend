@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/interviews")
+@RequestMapping("/api/interviews")
 @RequiredArgsConstructor
 public class InterviewController {
 

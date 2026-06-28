@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/stripe")
+@RequestMapping("/api/stripe")
 @RequiredArgsConstructor
 public class StripeWebhookController {
 

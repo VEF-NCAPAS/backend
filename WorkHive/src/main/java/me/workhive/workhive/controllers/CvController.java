@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/cv")
+@RequestMapping("/api/cv")
 @RequiredArgsConstructor
 public class CvController {
     private final CvServiceImpl cvService;

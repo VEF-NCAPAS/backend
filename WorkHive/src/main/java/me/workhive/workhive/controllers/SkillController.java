@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/skill")
+@RequestMapping("/api/skill")
 @RequiredArgsConstructor
 public class SkillController {
     private final SkillService skillService;

@@ -34,7 +34,6 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
-    private final UserRepository userRepository;
     private final RecruiterRepository recruiterRepository;
 
     @Override

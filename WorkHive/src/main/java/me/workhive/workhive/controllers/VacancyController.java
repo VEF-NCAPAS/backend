@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/vacancy")
+@RequestMapping("/api/vacancy")
 @RequiredArgsConstructor
 public class VacancyController {
     public final VacancyService vacancyService;

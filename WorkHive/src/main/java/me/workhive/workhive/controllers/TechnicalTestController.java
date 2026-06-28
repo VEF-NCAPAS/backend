@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/technical-tests")
+@RequestMapping("/api/technical-tests")
 @RequiredArgsConstructor
 public class TechnicalTestController {
 
