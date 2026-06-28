@@ -37,9 +37,8 @@ public class Application {
     @JoinColumn(name = "cv_id", nullable = false)
     private Cv cv;
 
-    @Lob
     @Size(max = 3000)
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String coverLetter;
 
     @OneToOne(mappedBy = "application", cascade = CascadeType.REMOVE, orphanRemoval = true)

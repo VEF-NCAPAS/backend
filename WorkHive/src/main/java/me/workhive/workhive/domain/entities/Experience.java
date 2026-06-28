@@ -28,9 +28,8 @@ public class Experience {
     @Column(nullable = false)
     private String position;
 
-    @Lob
     @Size(max = 3000)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)

@@ -26,9 +26,8 @@ public class Cv {
     @JoinColumn(name = "candidateProfileId", nullable = false)
     private CandidateProfile candidateProfile;
 
-    @Lob
-    @Size(max = 5000)
-    @Column(nullable = false)
+    @Size(max = 3000)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String professionalSummary;
 
     @Column(nullable = false)
