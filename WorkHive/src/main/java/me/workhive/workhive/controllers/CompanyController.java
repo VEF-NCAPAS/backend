@@ -42,6 +42,10 @@ public class CompanyController {
     }
 
     @GetMapping("/my-company")
+    @Operation(
+            summary = "Obtener mi compañía",
+            description = "Permite al reclutador obtener su empresa"
+    )
     @PreAuthorize("hasRole('RECRUITER')")
     public ResponseEntity<GeneralResponse> getMyCompany(@AuthenticationPrincipal User user) {
         return responseFactory.buildResponse(
@@ -52,6 +56,10 @@ public class CompanyController {
     }
 
     @PostMapping
+    @Operation(
+            summary = "Agregar nueva empresa",
+            description = "Permite al administrador agregar nueva empresa"
+    )
     @PreAuthorize("hasAnyRole( 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> createCompany(@Valid @RequestBody CreateCompanyRequest request) {
         return responseFactory.buildResponse(
@@ -62,6 +70,10 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Obtener empresa por id",
+            description = "Obtiene una empresa al proporcionar un id"
+    )
     public ResponseEntity<GeneralResponse> getCompanyById(@PathVariable UUID id) {
         return responseFactory.buildResponse(
                 "Company retrieved successfully",
@@ -71,6 +83,10 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Actualizar empresa",
+            description = "Permite al administrador y reclutador actualizar información de empresa"
+    )
     @PreAuthorize("hasAnyRole( 'ADMINISTRATOR', 'RECRUITER')")
     public ResponseEntity<GeneralResponse> updateCompany(
             @PathVariable UUID id,
@@ -85,6 +101,10 @@ public class CompanyController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Eliminar una empresa",
+            description = "Permite al administrador eliminar una empresa"
+    )
     @PreAuthorize("hasAnyRole( 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> deleteCompany(@PathVariable UUID id) {
         return responseFactory.buildResponse(
@@ -95,6 +115,10 @@ public class CompanyController {
     }
 
     @GetMapping("/admin")
+    @Operation(
+            summary = "Obtener las empresas",
+            description = "Permite al administrador obtener todas las empresas"
+    )
     @PreAuthorize("hasRole( 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getAllCompaniesAdmin(
             @RequestParam(defaultValue = "0") int page,
@@ -112,6 +136,10 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}/diversity")
+    @Operation(
+            summary = "Obtener estadísticas de diversidad",
+            description = "Permite al administrador y reclutador obtener las estadísticas de diversidad"
+    )
     @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'RECRUITER')")
     public ResponseEntity<GeneralResponse> getCompanyDiversityStats(@PathVariable UUID id) {
         return responseFactory.buildResponse(

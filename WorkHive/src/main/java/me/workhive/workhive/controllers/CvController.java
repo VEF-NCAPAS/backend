@@ -1,14 +1,12 @@
 package me.workhive.workhive.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.workhive.workhive.domain.dto.request.CreateCvRequest;
 import me.workhive.workhive.domain.dto.request.UpdateCvRequest;
-import me.workhive.workhive.domain.dto.response.CvResponse;
 import me.workhive.workhive.domain.dto.response.GeneralResponse;
 import me.workhive.workhive.domain.entities.User;
-import me.workhive.workhive.repositories.UserRepository;
-import me.workhive.workhive.services.CvService;
 import me.workhive.workhive.services.impl.CvServiceImpl;
 import me.workhive.workhive.utils.ResponseFactory;
 import org.springframework.http.HttpStatus;
@@ -29,6 +27,10 @@ public class CvController {
     private final ResponseFactory responseFactory;
 
     @PostMapping
+    @Operation(
+            summary = "Crear cv",
+            description = "Permite al usuario crear su CV"
+    )
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<GeneralResponse> createCv(@Valid @RequestBody CreateCvRequest request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -42,6 +44,10 @@ public class CvController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Obtener cv por id",
+            description = "Permite obtener el CV por id"
+    )
     @PreAuthorize("hasAnyRole( 'RECRUITER', 'ADMINISTRATOR')")
     public ResponseEntity<GeneralResponse> getCvById(
             @PathVariable UUID id
@@ -54,6 +60,10 @@ public class CvController {
         );
     }
     @GetMapping("/me")
+    @Operation(
+            summary = "Obtener mi cv",
+            description = "Permite al usuario obtener su CV"
+    )
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<GeneralResponse> getMyCv(
             @AuthenticationPrincipal User user
@@ -66,6 +76,10 @@ public class CvController {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Actualizar cv",
+            description = "Permite al usuario actualizar su CV"
+    )
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<GeneralResponse> updateCv(
             @PathVariable UUID id,
@@ -80,6 +94,10 @@ public class CvController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(
+            summary = "Borrar cv",
+            description = "Permite al usuario eliminar su CV"
+    )
     @PreAuthorize("hasRole('CANDIDATE')")
     public ResponseEntity<GeneralResponse> deleteCv(
             @PathVariable UUID id,
