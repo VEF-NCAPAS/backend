@@ -68,9 +68,8 @@ public class CandidateServiceImpl implements CandidateService {
         );
 
         Page<CandidateScoreResponse> responsePage = applicationPage.map(app -> {
-            Cv cv = app.getCv();
-            double score = calculateScore(cv, request);
-            return candidateMapper.toCandidateScoreDto(cv, score);
+            double score = calculateScore(app.getCv(), request);
+            return candidateMapper.toCandidateScoreDto(app, score);
         });
 
         List<CandidateScoreResponse> sortedContent = responsePage.getContent().stream()

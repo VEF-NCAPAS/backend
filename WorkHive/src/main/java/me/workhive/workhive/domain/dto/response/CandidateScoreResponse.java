@@ -15,6 +15,7 @@ public class CandidateScoreResponse {
 
     private UUID cvId;
     private UUID candidateProfileId;
+    private UUID applicationId;
     private String name;
     private String email;
     private String location;

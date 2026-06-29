@@ -2,6 +2,7 @@ package me.workhive.workhive.common.mappers;
 
 import me.workhive.workhive.domain.dto.request.CandidateScoreRequest;
 import me.workhive.workhive.domain.dto.response.CandidateScoreResponse;
+import me.workhive.workhive.domain.entities.Application;
 import me.workhive.workhive.domain.entities.Cv;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +22,11 @@ public class CandidateMapper {
                 .build();
     }
 
-    public CandidateScoreResponse toCandidateScoreDto(Cv cv, double score) {
+    public CandidateScoreResponse toCandidateScoreDto(Application application, double score) {
+        Cv cv = application.getCv();
         return CandidateScoreResponse.builder()
                 .cvId(cv.getId())
+                .applicationId(application.getId())
                 .candidateProfileId(cv.getCandidateProfile().getId())
                 .name(cv.getCandidateProfile().getUser().getName())
                 .email(cv.getCandidateProfile().getUser().getEmail())
